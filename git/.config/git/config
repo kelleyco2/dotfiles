@@ -1,0 +1,18 @@
+[alias]
+    gbr = !git branch | grep -v \"master\" | xargs git branch -D
+    ac = !git add . && git commit -m
+    cob = !git checkout -b
+    ammend = !git commit --amend -m
+    c = !git checkout
+    pwl = !git push --force-with-lease
+    quickfix = !git add . && git commit --amend --no-edit
+[user]
+	signingkey = 0114B5A6B806B63C0AAF664D8AB2E7CBA451CDCB
+	email = cooper.kelley@pdq.com
+    password = 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
+[commit]
+	gpgsign = true
+[tag]
+	gpgsign = true
+[push]
+	autoSetupRemote = true
