@@ -62,7 +62,16 @@ return require('packer').startup(function(use)
     'folke/tokyonight.nvim',
 		config = function()
       vim.o.background = 'dark'
-      vim.cmd('colorscheme tokyonight-moon')
+      -- vim.cmd('colorscheme tokyonight-moon')
+    end
+  }
+
+	use {
+    'morhetz/gruvbox',
+		config = function()
+      vim.o.background = 'dark'
+			vim.g.gruvbox_contrast_dark = "hard"
+      vim.cmd('colorscheme gruvbox')
     end
   }
 
