@@ -59,10 +59,10 @@ return require('packer').startup(function(use)
 	}
 
 	use {
-    'NLKNguyen/papercolor-theme',
+    'folke/tokyonight.nvim',
 		config = function()
       vim.o.background = 'dark'
-      vim.cmd('colorscheme PaperColor')
+      vim.cmd('colorscheme tokyonight-moon')
     end
   }
 
