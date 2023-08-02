@@ -16,3 +16,7 @@ local window_group = vim.api.nvim_create_augroup("WindowGroup", { clear = true }
 -- on resize even out all the splits no matter what files we have open
 vim.api.nvim_create_autocmd("VimResized", { pattern = "*", group = window_group, command = [[exe "normal! \<c-w>=" ]]})
 
+-- highlight text after a yank
+vim.api.nvim_create_autocmd("TextYankPost", { pattern = "*", group = window_group, callback = function()
+  vim.highlight.on_yank({ timeout = 400 })
+end})
