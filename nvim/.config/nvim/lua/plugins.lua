@@ -43,30 +43,6 @@ return require('packer').startup(function(use)
   }
 
 	use {
-    'nvim-telescope/telescope.nvim',
-    requires = {'nvim-lua/plenary.nvim'},
-		config = function()
-      require('fuzzy')
-		end
-	}
-
-	use {
-    'sainnhe/everforest',
-		config = function()
-      vim.o.background = 'dark'
-			--vim.cmd('colorscheme everforest')
-		end
-	}
-
-	use {
-    'folke/tokyonight.nvim',
-		config = function()
-      vim.o.background = 'dark'
-      -- vim.cmd('colorscheme tokyonight-moon')
-    end
-  }
-
-	use {
     'morhetz/gruvbox',
 		config = function()
       vim.o.background = 'dark'
@@ -74,6 +50,14 @@ return require('packer').startup(function(use)
       vim.cmd('colorscheme gruvbox')
     end
   }
+
+	use {
+    'nvim-telescope/telescope.nvim',
+    requires = {'nvim-lua/plenary.nvim'},
+		config = function()
+      require('fuzzy')
+		end
+	}
 
 	use {
     'numToStr/Comment.nvim',
