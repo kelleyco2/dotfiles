@@ -1,0 +1,10 @@
+-- Force specific formatting engines
+vim.g.neoformat_enabled_typescript = { "prettier" }
+vim.g.neoformat_enabled_javascript = { "prettier" }
+vim.g.neoformat_enabled_json = { "prettier" }
+vim.g.neoformat_enabled_css = { "prettier" }
+vim.g.neoformat_enabled_markdown = { "prettier" }
+vim.g.neoformat_enabled_html = { "prettier" }
+vim.g.neoformat_enabled_svelte = { "prettierd" }
+vim.g.neoformat_enabled_lua = { "stylua" }
+vim.g.neoformat_enabled_elixir = { "mixformat" }

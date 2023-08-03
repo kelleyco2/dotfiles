@@ -4,6 +4,10 @@ local builtins = require('telescope.builtin')
 telescope.setup({
 		defaults = {
 			prompt_prefix = ' ',
+			sorting_strategy = 'ascending',
+			layout_config = {
+				prompt_position = 'top',
+			},
 		},
 		pickers = {
 			find_files = {
@@ -22,3 +26,5 @@ vim.keymap.set('n', '<leader><leader>', builtins.find_files)
 vim.keymap.set('n', '<leader>/', builtins.live_grep)
 vim.keymap.set('n', '<leader><bs>', builtins.buffers)
 vim.keymap.set('n', '<leader>f.', builtins.resume)
+vim.keymap.set('n', '<leader>lo', builtins.lsp_document_symbols)
+vim.keymap.set('n', '<leader>lO', vim.lsp.buf.document_symbol)

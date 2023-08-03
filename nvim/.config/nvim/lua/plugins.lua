@@ -75,10 +75,10 @@ local ensure_packer = function()
 	}
   
 	use {
-		"kylechui/nvim-surround",
-		tag = "*", -- Use for stability; omit to use `main` branch for the latest features
+		'kylechui/nvim-surround',
+		tag = '*', -- Use for stability; omit to use `main` branch for the latest features
 		config = function()
-			require("nvim-surround").setup({
+			require('nvim-surround').setup({
 				-- Configuration here, or leave empty to use defaults
 			})
 	end
@@ -87,7 +87,7 @@ local ensure_packer = function()
 	use {
 		'karb94/neoscroll.nvim',
 		config = function()
-			require("neoscroll").setup()
+			require('neoscroll').setup()
 		end
 	}
 
@@ -97,8 +97,39 @@ local ensure_packer = function()
 			require('leap').add_default_mappings()
 		end
 	}
+
+	use {
+		'sbdchd/neoformat',
+		config = function()
+			require('formatting')
+		end
+	}
+
+	use {
+		"neovim/nvim-lspconfig",
+		after = "nvim-cmp",
+		config = function()
+			require("lsp")
+		end
+	}
+
+	use {
+        "hrsh7th/nvim-cmp",
+        requires = {
+            "hrsh7th/cmp-nvim-lsp",
+            "hrsh7th/cmp-buffer",
+            "hrsh7th/cmp-path",
+            "hrsh7th/cmp-cmdline",
+            "L3MON4D3/LuaSnip",
+            "hrsh7th/cmp-nvim-lua",
+            "onsails/lspkind-nvim",
+        },
+        config = function()
+            require("complete")
+        end
+    }
   
 	  if packer_bootstrap then
 	  require('packer').sync()
 	end
-  end)
+end)
