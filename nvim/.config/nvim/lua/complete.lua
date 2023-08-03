@@ -130,4 +130,3 @@ cmp.setup.filetype("lua", {
 		{ name = "nvim_lua" },
 	}),
 })
-

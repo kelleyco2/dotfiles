@@ -1,135 +1,134 @@
 -- TODO: Describe Packer
 local ensure_packer = function()
 	local fn = vim.fn
-	local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
+	local install_path = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
 	if fn.empty(fn.glob(install_path)) > 0 then
-	  fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
-	  vim.cmd [[packadd packer.nvim]]
-	  return true
+		fn.system({ "git", "clone", "--depth", "1", "https://github.com/wbthomason/packer.nvim", install_path })
+		vim.cmd([[packadd packer.nvim]])
+		return true
 	end
 	return false
-  end
-  
-  local packer_bootstrap = ensure_packer()
-  
-  return require('packer').startup(function(use)
+end
+
+local packer_bootstrap = ensure_packer()
+
+return require("packer").startup(function(use)
 	-- Packer can manage itself
-	use 'wbthomason/packer.nvim'
-  
-	use {
-	  'goolord/alpha-nvim',
-	  config = function ()
-		local alpha = require('alpha')
-			  local dashboard = require('alpha.themes.dashboard')
-  
-			  -- Set Header
-			  dashboard.section.header.val = {
-		  '██████╗  █████╗ ███████╗███████╗██╗     ██╗███╗   ██╗███████╗',
-				  '██╔══██╗██╔══██╗██╔════╝██╔════╝██║     ██║████╗  ██║██╔════╝',
-				  '██████╔╝███████║███████╗█████╗  ██║     ██║██╔██╗ ██║█████╗  ',
-				  '██╔══██╗██╔══██║╚════██║██╔══╝  ██║     ██║██║╚██╗██║██╔══╝  ',
-				  '██████╔╝██║  ██║███████║███████╗███████╗██║██║ ╚████║███████╗',
-				  '╚═════╝ ╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝╚═╝╚═╝  ╚═══╝╚══════╝'
-			  }
-  
-			  -- Set menu
-			  dashboard.section.buttons.val = {
-				  dashboard.button('<space><space>', 'find files', ':Telescope find_files<CR>'),
-		  dashboard.button('?', 'Learn Base', ':e init.lua<CR>')
-			  }
-  
-			  alpha.setup(dashboard.opts)
-	  end
-	}
+	use("wbthomason/packer.nvim")
 
-	use {
-	  'EdenEast/nightfox.nvim',
-	  config = function()
-		vim.o.background = 'dark'
-		vim.cmd('colorscheme carbonfox')
-	  end
-	}
+	use({
+		"goolord/alpha-nvim",
+		config = function()
+			local alpha = require("alpha")
+			local dashboard = require("alpha.themes.dashboard")
 
-  
-	use {
-	  'nvim-telescope/telescope.nvim',
-	  requires = {'nvim-lua/plenary.nvim'},
-		config = function()
-	  		require('fuzzy')
-	  end
-	}
-  
-	use {
-	  'numToStr/Comment.nvim',
-	  config = function()
-		  require('Comment').setup()
-	  end
-	}
-  
-	use {
-		'nvim-treesitter/nvim-treesitter',
-		config = function()
-			require('treesitter')
+			-- Set Header
+			dashboard.section.header.val = {
+				"██████╗  █████╗ ███████╗███████╗██╗     ██╗███╗   ██╗███████╗",
+				"██╔══██╗██╔══██╗██╔════╝██╔════╝██║     ██║████╗  ██║██╔════╝",
+				"██████╔╝███████║███████╗█████╗  ██║     ██║██╔██╗ ██║█████╗  ",
+				"██╔══██╗██╔══██║╚════██║██╔══╝  ██║     ██║██║╚██╗██║██╔══╝  ",
+				"██████╔╝██║  ██║███████║███████╗███████╗██║██║ ╚████║███████╗",
+				"╚═════╝ ╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝╚═╝╚═╝  ╚═══╝╚══════╝",
+			}
+
+			-- Set menu
+			dashboard.section.buttons.val = {
+				dashboard.button("<space><space>", "find files", ":Telescope find_files<CR>"),
+				dashboard.button("?", "Learn Base", ":e init.lua<CR>"),
+			}
+
+			alpha.setup(dashboard.opts)
 		end,
-		requires = { 'nvim-treesitter/nvim-treesitter-textobjects' }
-	}
-  
-	use {
-		'kylechui/nvim-surround',
-		tag = '*', -- Use for stability; omit to use `main` branch for the latest features
+	})
+
+	use({
+		"EdenEast/nightfox.nvim",
 		config = function()
-			require('nvim-surround').setup({
+			vim.o.background = "dark"
+			vim.cmd("colorscheme carbonfox")
+		end,
+	})
+
+	use({
+		"nvim-telescope/telescope.nvim",
+		requires = { "nvim-lua/plenary.nvim" },
+		config = function()
+			require("fuzzy")
+		end,
+	})
+
+	use({
+		"numToStr/Comment.nvim",
+		config = function()
+			require("Comment").setup()
+		end,
+	})
+
+	use({
+		"nvim-treesitter/nvim-treesitter",
+		config = function()
+			require("treesitter")
+		end,
+		requires = { "nvim-treesitter/nvim-treesitter-textobjects" },
+	})
+
+	use({
+		"kylechui/nvim-surround",
+		tag = "*", -- Use for stability; omit to use `main` branch for the latest features
+		config = function()
+			require("nvim-surround").setup({
 				-- Configuration here, or leave empty to use defaults
 			})
-	end
-	}
+		end,
+	})
 
-	use {
-		'karb94/neoscroll.nvim',
+	use({
+		"karb94/neoscroll.nvim",
 		config = function()
-			require('neoscroll').setup()
-		end
-	}
+			require("neoscroll").setup()
+		end,
+	})
 
-	use {
-		'ggandor/leap.nvim',
+	use({
+		"ggandor/leap.nvim",
 		config = function()
-			require('leap').add_default_mappings()
-		end
-	}
+			require("leap").add_default_mappings()
+		end,
+	})
 
-	use {
-		'sbdchd/neoformat',
+	use({
+		"sbdchd/neoformat",
 		config = function()
-			require('formatting')
-		end
-	}
+			require("formatting")
+		end,
+	})
 
-	use {
+	use({
 		"neovim/nvim-lspconfig",
 		after = "nvim-cmp",
 		config = function()
 			require("lsp")
-		end
-	}
+		end,
+	})
 
-	use {
-        "hrsh7th/nvim-cmp",
-        requires = {
-            "hrsh7th/cmp-nvim-lsp",
-            "hrsh7th/cmp-buffer",
-            "hrsh7th/cmp-path",
-            "hrsh7th/cmp-cmdline",
-            "L3MON4D3/LuaSnip",
-            "hrsh7th/cmp-nvim-lua",
-            "onsails/lspkind-nvim",
-        },
-        config = function()
-            require("complete")
-        end
-    }
-  
-	  if packer_bootstrap then
-	  require('packer').sync()
+	use({
+		"hrsh7th/nvim-cmp",
+		requires = {
+			"hrsh7th/cmp-nvim-lsp",
+			"hrsh7th/cmp-buffer",
+			"hrsh7th/cmp-path",
+			"hrsh7th/cmp-cmdline",
+			"L3MON4D3/LuaSnip",
+			"hrsh7th/cmp-nvim-lua",
+			"onsails/lspkind-nvim",
+		},
+		config = function()
+			require("complete")
+		end,
+	})
+
+	if packer_bootstrap then
+		require("packer").sync()
 	end
 end)
