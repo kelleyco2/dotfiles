@@ -15,3 +15,5 @@
 	gpgsign = true
 [push]
 	autoSetupRemote = true
+[status]
+	showUntrackedFiles = all

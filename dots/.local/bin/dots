@@ -2,4 +2,4 @@
 
 cd ~/dotfiles
 brew bundle
-stow */
+stow --no-folding */
