@@ -29,6 +29,7 @@ vim.opt.softtabstop = 2
 vim.opt.shiftwidth = 2
 vim.opt.smartindent = true
 vim.opt.autoindent = true
+vim.opt.completeopt = { "menu", "menuone", "noselect" }
 
 -- The "Leader key" is a way of extending the power of VIM's shortcuts by using sequences of keys to perform a command.
 -- The default leader key is backslash. Therefore, if you have a map of <Leader>Q, you can perform that action by typing \Q.

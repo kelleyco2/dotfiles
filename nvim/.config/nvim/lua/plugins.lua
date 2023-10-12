@@ -143,6 +143,20 @@ return require("packer").startup(function(use)
 
 	use("christoomey/vim-tmux-navigator")
 
+	use {
+		"luukvbaal/nnn.nvim",
+		config = function() 
+			local nnn = require("nnn")
+    		require('nnn').setup {
+      			mappings = {
+        			{ "<C-t>", nnn.builtin.open_in_tab },       -- open file(s) in tab
+        			{ "<C-x>", nnn.builtin.open_in_split },     -- open file(s) in split
+        			{ "<C-v>", nnn.builtin.open_in_vsplit },    -- open file(s) in vertical split
+      			}
+    		}
+		end
+	}
+
 	if packer_bootstrap then
 		require("packer").sync()
 	end

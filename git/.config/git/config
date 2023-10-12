@@ -6,6 +6,7 @@
     c = !git checkout
     pwl = !git push --force-with-lease
     quickfix = !git add . && git commit --amend --no-edit
+	reset = !git reset --soft HEAD~1
 [user]
 	signingkey = 0114B5A6B806B63C0AAF664D8AB2E7CBA451CDCB
 	email = cooper.kelley@pdq.com
