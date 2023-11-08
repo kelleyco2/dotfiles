@@ -6,10 +6,10 @@ windows:
     commands:
       - nvim
   - name: " "
-    layout: main-horizontal
+    layout: even-horizontal
     commands:
       - clear
     panes:
-      - type: vertical
+      - type: horizontal
         commands:
           - ui
