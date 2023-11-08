@@ -143,3 +143,7 @@ cmp.setup.filetype("lua", {
 		{ name = "nvim_lua" },
 	}),
 })
+
+cmp.config.formatting = {
+	format = require("tailwindcss-colorizer-cmp").formatter,
+}

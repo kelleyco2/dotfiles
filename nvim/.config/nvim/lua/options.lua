@@ -35,3 +35,8 @@ vim.opt.completeopt = { "menu", "menuone", "noselect" }
 -- The default leader key is backslash. Therefore, if you have a map of <Leader>Q, you can perform that action by typing \Q.
 -- see `:help <leader>`
 vim.g.mapleader = " "
+
+vim.opt.splitbelow = true
+vim.opt.splitright = true
+vim.opt.clipboard = "unnamed"
+vim.opt.cursorline = true

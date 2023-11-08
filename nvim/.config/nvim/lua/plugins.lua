@@ -143,19 +143,73 @@ return require("packer").startup(function(use)
 
 	use("christoomey/vim-tmux-navigator")
 
-	use {
+	use({
 		"luukvbaal/nnn.nvim",
-		config = function() 
+		config = function()
 			local nnn = require("nnn")
-    		require('nnn').setup {
-      			mappings = {
-        			{ "<C-t>", nnn.builtin.open_in_tab },       -- open file(s) in tab
-        			{ "<C-x>", nnn.builtin.open_in_split },     -- open file(s) in split
-        			{ "<C-v>", nnn.builtin.open_in_vsplit },    -- open file(s) in vertical split
-      			}
-    		}
-		end
-	}
+			require("nnn").setup({
+				mappings = {
+					{ "<C-t>", nnn.builtin.open_in_tab }, -- open file(s) in tab
+					{ "<C-x>", nnn.builtin.open_in_split }, -- open file(s) in split
+					{ "<C-v>", nnn.builtin.open_in_vsplit }, -- open file(s) in vertical split
+				},
+			})
+		end,
+	})
+
+	use("tpope/vim-fugitive")
+
+	use({
+		"folke/which-key.nvim",
+		config = function()
+			vim.o.timeout = true
+			vim.o.timeoutlen = 300
+			require("which-key").setup({
+				-- your configuration comes here
+				-- or leave it empty to use the default settings
+				-- refer to the configuration section below
+			})
+		end,
+	})
+
+	use({
+		"windwp/nvim-autopairs",
+		config = function()
+			require("nvim-autopairs").setup()
+		end,
+	})
+
+	use({
+		"roobert/tailwindcss-colorizer-cmp.nvim",
+		-- optionally, override the default options:
+		config = function()
+			require("tailwindcss-colorizer-cmp").setup({
+				color_square_width = 2,
+			})
+		end,
+	})
+
+	-- use({
+	-- 	"m4xshen/hardtime.nvim",
+	-- 	requires = { "MunifTanjim/nui.nvim", "nvim-lua/plenary.nvim" },
+	-- 	config = function()
+	-- 		require("hardtime").setup()
+	-- 	end,
+	-- })
+
+	use({
+		"HiPhish/rainbow-delimiters.nvim",
+		config = function()
+			require("rainbow-delimiters.setup").setup()
+		end,
+	})
+
+	use({
+		"windwp/nvim-ts-autotag",
+		config = function()
+			require("nvim-ts-autotag").setup()
+		end,
+	})
 
 	if packer_bootstrap then
 		require("packer").sync()

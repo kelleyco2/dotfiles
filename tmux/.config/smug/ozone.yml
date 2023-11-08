@@ -10,9 +10,6 @@ windows:
     commands:
       - clear
     panes:
-      - type: horizontal
-        commands:
-          - ui
       - type: vertical
         commands:
-          - clear
+          - ui
