@@ -58,7 +58,7 @@ return require("packer").startup(function(use)
 
 	use({
 		"nvim-telescope/telescope.nvim",
-		requires = { "nvim-lua/plenary.nvim" },
+		requires = { "nvim-lua/plenary.nvim", "nvim-telescope/telescope-symbols.nvim" },
 		config = function()
 			require("fuzzy")
 		end,
@@ -139,6 +139,7 @@ return require("packer").startup(function(use)
 		config = function()
 			require("indent")
 		end,
+		after = { "rainbow-delimiters.nvim" },
 	})
 
 	use("christoomey/vim-tmux-navigator")
@@ -208,6 +209,18 @@ return require("packer").startup(function(use)
 		"windwp/nvim-ts-autotag",
 		config = function()
 			require("nvim-ts-autotag").setup()
+		end,
+	})
+
+	use({
+		"janko/vim-test",
+		requires = {
+			"tpope/vim-dispatch",
+			"neomake/neomake",
+			"preservim/vimux",
+		},
+		config = function()
+			require("testing")
 		end,
 	})
 

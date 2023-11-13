@@ -16,6 +16,20 @@ telescope.setup({
 		buffers = {
 			show_all_buffers = true,
 		},
+		live_grep = {
+			vimgrep_arguments = {
+				"rg",
+				"-g",
+				"!.git",
+				"--hidden",
+				"--color=never",
+				"--no-heading",
+				"--with-filename",
+				"--line-number",
+				"--column",
+				"--smart-case",
+			},
+		},
 	},
 })
 
@@ -28,3 +42,4 @@ vim.keymap.set("n", "<leader><bs>", builtins.buffers)
 vim.keymap.set("n", "<leader>f.", builtins.resume)
 vim.keymap.set("n", "<leader>lo", builtins.lsp_document_symbols)
 vim.keymap.set("n", "<leader>lO", vim.lsp.buf.document_symbol)
+vim.keymap.set("n", "<leader>fi", "<CMD>Telescope symbols<CR>")
