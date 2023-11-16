@@ -2,7 +2,9 @@ local map = vim.keymap.set
 
 vim.diagnostic.config({
 	underline = true,
-	virtual_text = false,
+	virtual_text = {
+		prefix = "◯ ",
+	},
 	signs = true,
 })
 
