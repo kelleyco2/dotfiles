@@ -42,3 +42,5 @@ vim.opt.clipboard = "unnamed"
 vim.opt.cursorline = true
 -- vim.opt.statuscolumn = "%{v:relnum?v:relnum:v:lnum}%=%s"
 vim.opt.signcolumn = "yes"
+
+vim.notify = require("notify")

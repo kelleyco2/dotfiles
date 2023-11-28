@@ -224,6 +224,22 @@ return require("packer").startup(function(use)
 		end,
 	})
 
+	use("rcarriga/nvim-notify")
+
+	use({
+		"dmmulroy/tsc.nvim",
+		config = function()
+			require("tsc").setup()
+		end,
+	})
+
+	use({
+		"andrewferrier/debugprint.nvim",
+		config = function()
+			require("log")
+		end,
+	})
+
 	if packer_bootstrap then
 		require("packer").sync()
 	end
