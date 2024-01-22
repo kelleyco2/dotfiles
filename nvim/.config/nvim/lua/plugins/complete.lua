@@ -158,5 +158,7 @@ return {
 				}),
 			})
 		end,
+		lazy = true,
+		event = "VeryLazy",
 	},
 }

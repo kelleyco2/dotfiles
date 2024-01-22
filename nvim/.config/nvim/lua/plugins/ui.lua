@@ -48,10 +48,10 @@ return {
 				section_separators = { left = "", right = "" },
 			},
 			sections = {
-				lualine_a = { "mode" },
-				lualine_b = { "branch", "diff", "diagnostics" },
-				lualine_c = { "filename" },
-				lualine_x = { "encoding", "fileformat" },
+				lualine_a = {},
+				lualine_b = { "diff" },
+				lualine_c = { { "filename", path = 3 } },
+				lualine_x = {},
 				lualine_y = { "filetype" },
 				lualine_z = { "location" },
 			},
@@ -113,5 +113,7 @@ return {
 			hooks.register(hooks.type.SCOPE_HIGHLIGHT, hooks.builtin.scope_highlight_from_extmark)
 		end,
 		dependencies = { "rainbow-delimiters.nvim", "nightfox.nvim" },
+		lazy = true,
+		event = "VeryLazy",
 	},
 }

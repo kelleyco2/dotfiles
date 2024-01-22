@@ -64,6 +64,7 @@ return {
 	{
 		"windwp/nvim-ts-autotag",
 		config = true,
+		ft = { "javascript", "typescript", "typescriptreact" },
 	},
 	{
 		"dmmulroy/tsc.nvim",
