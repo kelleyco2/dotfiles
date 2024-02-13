@@ -129,4 +129,10 @@ return {
 			},
 		},
 	},
+	{
+		"tmillr/sos.nvim",
+		config = function()
+			require("sos").setup()
+		end,
+	},
 }
