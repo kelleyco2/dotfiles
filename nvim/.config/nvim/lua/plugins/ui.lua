@@ -39,6 +39,7 @@ return {
 		dependencies = {
 			"lualine.nvim",
 		},
+		priority = 1000,
 	},
 	{
 		"nvim-lualine/lualine.nvim",

@@ -78,3 +78,5 @@ export NVM_DIR="$HOME/.nvm"
 #######################################################################
 color=$(( ( RANDOM % 6 ) + 1 ))
 tput setaf $color && toilet -F border -t -f pagga "Always do your best!" 
+
+PATH=~/.console-ninja/.bin:$PATH
