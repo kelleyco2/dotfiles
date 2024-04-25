@@ -44,3 +44,4 @@ vim.opt.cursorline = true
 vim.opt.signcolumn = "yes"
 
 vim.wo.relativenumber = true
+vim.opt.conceallevel = 1

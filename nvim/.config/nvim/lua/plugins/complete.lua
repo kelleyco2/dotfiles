@@ -70,6 +70,9 @@ return {
 							luasnip = "[LuaSnip]",
 							nvim_lua = "[Lua]",
 							path = "[Path]",
+							obsidian = "[Obsidian]",
+							obsidian_new = "[Obsidian]",
+							obsidian_tags = "[Obsidian]",
 						})[entry.source.name]
 						return vim_item
 					end,
