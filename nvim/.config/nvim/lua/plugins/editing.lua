@@ -75,7 +75,6 @@ return {
 	{
 		"andrewferrier/debugprint.nvim",
 		opts = {
-			create_keymaps = false,
 			display_snippet = false,
 			print_tag = "DEBUG",
 		},

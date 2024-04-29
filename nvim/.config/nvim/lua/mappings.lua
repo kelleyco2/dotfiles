@@ -43,3 +43,10 @@ vim.keymap.set("n", "<leader>7", "<Cmd>BufferLineGoToBuffer 7<CR>")
 vim.keymap.set("n", "<leader>8", "<Cmd>BufferLineGoToBuffer 8<CR>")
 vim.keymap.set("n", "<leader>9", "<Cmd>BufferLineGoToBuffer 9<CR>")
 vim.keymap.set("n", "<leader>$", "<Cmd>BufferLineGoToBuffer -1<CR>")
+
+-- Pomodoro timers
+vim.keymap.set("n", "<leader>pw", "<Cmd>TimerStart 25m Work<CR>")
+vim.keymap.set("n", "<leader>pb", "<Cmd>TimerStart 5m Break<CR>")
+vim.keymap.set("n", "<leader>pr", "<Cmd>TimerStart 30m Rest<CR>")
+vim.keymap.set("n", "<leader>pp", "<Cmd>TimerPause<CR>")
+vim.keymap.set("n", "<leader>ps", "<Cmd>TimerStop<CR>")

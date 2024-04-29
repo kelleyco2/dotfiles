@@ -52,7 +52,21 @@ return {
 				lualine_a = {},
 				lualine_b = { "diff" },
 				lualine_c = { { "filename", path = 3 } },
-				lualine_x = {},
+				lualine_x = {
+					function()
+						local ok, pomo = pcall(require, "pomo")
+						if not ok then
+							return ""
+						end
+
+						local timer = pomo.get_first_to_finish()
+						if timer == nil then
+							return ""
+						end
+
+						return "󰄉 " .. tostring(timer)
+					end,
+				},
 				lualine_y = { "filetype" },
 				lualine_z = { "location" },
 			},
@@ -154,6 +168,27 @@ return {
 				{
 					name = "Oracle",
 					path = "~/Code/Oracle",
+				},
+			},
+		},
+	},
+	{
+		"epwalsh/pomo.nvim",
+		version = "*", -- Recommended, use latest release instead of latest commit
+		lazy = true,
+		cmd = { "TimerStart", "TimerRepeat" },
+		dependencies = {
+			-- Optional, but highly recommended if you want to use the "Default" timer
+			"rcarriga/nvim-notify",
+		},
+		opts = {
+			-- See below for full list of options 👇
+			notifiers = {
+				{
+					name = "Default",
+					opts = {
+						sticky = false,
+					},
 				},
 			},
 		},
