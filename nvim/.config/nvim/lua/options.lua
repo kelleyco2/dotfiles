@@ -45,3 +45,5 @@ vim.opt.signcolumn = "yes"
 
 vim.wo.relativenumber = true
 vim.opt.conceallevel = 1
+
+vim.g.copilot_filetypes = { gitcommit = true }

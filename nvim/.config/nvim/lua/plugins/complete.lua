@@ -164,4 +164,5 @@ return {
 		lazy = true,
 		event = "VeryLazy",
 	},
+	"github/copilot.vim",
 }

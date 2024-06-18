@@ -50,3 +50,10 @@ vim.keymap.set("n", "<leader>pb", "<Cmd>TimerStart 5m Break<CR>")
 vim.keymap.set("n", "<leader>pr", "<Cmd>TimerStart 30m Rest<CR>")
 vim.keymap.set("n", "<leader>pp", "<Cmd>TimerPause<CR>")
 vim.keymap.set("n", "<leader>ps", "<Cmd>TimerStop<CR>")
+
+-- Copilot complete
+vim.keymap.set("i", "<C-l>", 'copilot#Accept("\\<CR>")', {
+	expr = true,
+	replace_keycodes = false,
+})
+vim.g.copilot_no_tab_map = true
