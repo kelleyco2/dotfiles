@@ -50,9 +50,6 @@ return {
 					},
 				},
 			},
-			autotag = {
-				enable = true,
-			},
 			endwise = {
 				enable = true,
 			},
