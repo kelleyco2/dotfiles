@@ -33,6 +33,8 @@ plugins=(git)
 source $ZSH/oh-my-zsh.sh
 
 # For a full list of active aliases, run `alias`.
+alias -g R="| rg"
+alias -g CC="| pbcopy"
 alias zshconfig="code ~/.zshrc"
 alias gitconfig="code ~/.gitconfig"
 alias pdq="yarn dev:pdq"
