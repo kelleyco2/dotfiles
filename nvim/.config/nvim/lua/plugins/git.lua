@@ -21,11 +21,11 @@ return {
 
 			gitsigns.setup({
 				signs = {
-					add = { hl = "GitGutterAdd", text = "│" },
-					change = { hl = "GitGutterChange", text = "│" },
-					delete = { hl = "GitGutterDelete", text = "│" },
-					topdelete = { hl = "GitGutterDelete", text = "│" },
-					changedelete = { hl = "GitGutterDelete", text = "│" },
+					add = { text = "│" },
+					change = { text = "│" },
+					delete = { text = "│" },
+					topdelete = { text = "│" },
+					changedelete = { text = "│" },
 				},
 				on_attach = function(bufnr)
 					local map = vim.keymap.set
