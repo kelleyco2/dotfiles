@@ -51,6 +51,7 @@ return {
 			vim.g.neoformat_enabled_css = { "prettier" }
 			vim.g.neoformat_enabled_markdown = { "prettier" }
 			vim.g.neoformat_enabled_html = { "prettier" }
+			vim.g.neoformat_enabled_html = { "prettier" }
 			vim.g.neoformat_enabled_svelte = { "prettierd" }
 			vim.g.neoformat_enabled_lua = { "stylua" }
 			vim.g.neoformat_enabled_elixir = { "mixformat" }
