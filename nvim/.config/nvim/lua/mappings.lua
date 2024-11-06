@@ -57,3 +57,8 @@ vim.keymap.set("i", "<C-l>", 'copilot#Accept("\\<CR>")', {
 	replace_keycodes = false,
 })
 vim.g.copilot_no_tab_map = true
+
+-- ChatGPT
+vim.keymap.set({ "n", "v" }, "<leader>gc", "<CMD>ChatGPT<CR>")
+vim.keymap.set({ "n", "v" }, "<leader>ge", "<CMD>ChatGPTEditWithInstruction<CR>")
+vim.keymap.set({ "n", "v" }, "<leader>gt", "<CMD>ChatGPTRun add_tests<CR>")
