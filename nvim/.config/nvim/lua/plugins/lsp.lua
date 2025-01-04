@@ -40,7 +40,10 @@ return {
 				capabilities = require("cmp_nvim_lsp").default_capabilities(),
 			})
 
-			lsp_config.ts_ls.setup({ on_attach = on_attach })
+			lsp_config.ts_ls.setup({
+				on_attach = on_attach,
+				capabilities = require("cmp_nvim_lsp").default_capabilities(),
+			})
 		end,
 	},
 }
