@@ -57,6 +57,7 @@ vim.keymap.set("i", "<C-l>", 'copilot#Accept("\\<CR>")', {
 	replace_keycodes = false,
 })
 vim.g.copilot_no_tab_map = true
+vim.g.copilot_model = "claude-3-7-sonnet-20250219"
 
 -- ChatGPT
 vim.keymap.set({ "n", "v" }, "<leader>gc", "<CMD>ChatGPT<CR>")

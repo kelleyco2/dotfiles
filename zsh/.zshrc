@@ -15,6 +15,7 @@ export GPG_TTY=$TTY
 
 # asdf
 # . "$HOME/.asdf/asdf.sh"
+export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"
 
 export MANPAGER="nvim +Man!"
 
@@ -28,7 +29,7 @@ ZSH_THEME="gnzh"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
+plugins=(git asdf)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -42,6 +43,7 @@ alias smdm="yarn dev:simplemdm"
 alias sd="yarn dev:smartdeploy"
 alias ui="yarn dev:ui"
 alias templates="auth0 universal-login templates update"
+alias reload="source ~/.zshrc"
 
 alias pdqui='
 cd ~/Code/ozone

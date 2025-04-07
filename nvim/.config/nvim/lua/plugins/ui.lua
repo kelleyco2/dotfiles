@@ -72,18 +72,18 @@ return {
 			},
 		},
 	},
-	{
-		"rcarriga/nvim-notify",
-		config = function()
-			vim.notify = require("notify")
-		end,
-	},
-	{
-		"HiPhish/rainbow-delimiters.nvim",
-		config = function()
-			require("rainbow-delimiters.setup").setup()
-		end,
-	},
+	-- {
+	-- 	"rcarriga/nvim-notify",
+	-- 	config = function()
+	-- 		vim.notify = require("notify")
+	-- 	end,
+	-- },
+	-- {
+	-- 	"HiPhish/rainbow-delimiters.nvim",
+	-- 	config = function()
+	-- 		require("rainbow-delimiters.setup").setup()
+	-- 	end,
+	-- },
 	{
 		"lukas-reineke/indent-blankline.nvim",
 		config = function()
