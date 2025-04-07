@@ -10,7 +10,7 @@
 [merge]
 	conflictstyle = diff3
 [user]
-	signingkey = 0114B5A6B806B63C0AAF664D8AB2E7CBA451CDCB
+	signingkey = 60063DC12E49C697DFD17276A6D2F7FAE40F1299
 	email = cooper.kelley@pdq.com
 [commit]
 	gpgsign = true
@@ -20,3 +20,5 @@
 	autoSetupRemote = true
 [status]
 	showUntrackedFiles = all
+[gpg]
+	program = /opt/homebrew/bin/gpg
