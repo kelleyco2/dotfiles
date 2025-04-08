@@ -1,6 +1,6 @@
 #!/bin/sh
 
 set -eu
-TARGET=$(ls -d ~/dotfiles/ ~/Journal/$(date +%Y)/ ~/Code/* | fzf --header-first --header="Launch Project" --prompt="🔮 " --preview "exa --tree --icons --level 3 --git-ignore {}")
+TARGET=$(ls -d ~/dotfiles/ ~/Journal/$(date +%Y)/ ~/Code/* | fzf --header-first --header="Launch Project" --prompt="🔮 " --preview "eza --tree --icons --level 3 --git-ignore {}")
 NAME=$(basename $TARGET)
 smug start $NAME -a 2>/dev/null || smug start default name=$NAME root=$TARGET -a
