@@ -43,6 +43,10 @@ alias sd="yarn dev:smartdeploy"
 alias ui="yarn dev:ui"
 alias templates="auth0 universal-login templates update"
 
+# Use bat and fd tools
+alias cat="bat"
+alias find="fd"
+
 alias pdqui='
 cd ~/Code/ozone
 tmux new-session -s pdq \; \
@@ -87,3 +91,9 @@ if [ -f '/Users/cooperkelley/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/co
 
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/cooperkelley/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/cooperkelley/google-cloud-sdk/completion.zsh.inc'; fi
+
+# Initialize zoxide
+eval "$(zoxide init zsh)"
+
+# Enable Turborepo remote caching
+export TURBO_REMOTE_CACHE=true

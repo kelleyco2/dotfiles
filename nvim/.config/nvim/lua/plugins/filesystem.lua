@@ -13,10 +13,17 @@ return {
 					layout_config = {
 						prompt_position = "top",
 					},
+					-- Configure Telescope to use bat for file previews
+					file_previewer = function(...)
+						require("telescope.previewers").cat.new({
+							cmd = { "bat", "--style=numbers,changes", "--color=always" },
+						})(...)
+					end,
 				},
 				pickers = {
 					find_files = {
-						find_command = { "rg", "--files", "--hidden", "-g", "!.git" },
+						-- Use fd instead of ripgrep for file finding
+						find_command = { "fd", "--type", "file", "--hidden", "--follow", "--exclude", ".git" },
 					},
 					buffers = {
 						show_all_buffers = true,
