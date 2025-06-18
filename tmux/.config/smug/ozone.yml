@@ -13,6 +13,6 @@ windows:
       - type: horizontal
         commands:
           - ui
-  - name: "  "
+  - name: " "
     commands:
       - gh dash
