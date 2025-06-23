@@ -38,7 +38,16 @@ Follow the interactive prompts to:
 1. Generate a new GPG key
 2. Configure Git to use the key for signing commits
 
-### 5. Reload your shell configuration
+### 5. Install tmux plugins
+```bash
+# Source tmux configuration
+tmux source ~/.config/tmux/tmux.conf
+
+# In any tmux session, press: Ctrl+a + I (capital i)
+# This installs all plugins including vim-tmux-navigator for seamless Vim/tmux navigation
+```
+
+### 6. Reload your shell configuration
 ```bash
 source ~/.zshrc
 ```
