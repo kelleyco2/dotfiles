@@ -62,3 +62,41 @@ vim.g.copilot_no_tab_map = true
 vim.keymap.set({ "n", "v" }, "<leader>gc", "<CMD>ChatGPT<CR>")
 vim.keymap.set({ "n", "v" }, "<leader>ge", "<CMD>ChatGPTEditWithInstruction<CR>")
 vim.keymap.set({ "n", "v" }, "<leader>gt", "<CMD>ChatGPTRun add_tests<CR>")
+
+-- Obsidian.nvim mappings
+vim.keymap.set("n", "<leader>on", "<CMD>ObsidianNew<CR>", { desc = "Create new note" })
+vim.keymap.set("n", "<leader>oq", "<CMD>ObsidianQuickSwitch<CR>", { desc = "Quick switch notes" })
+vim.keymap.set("n", "<leader>of", "<CMD>ObsidianFollowLink<CR>", { desc = "Follow link under cursor" })
+vim.keymap.set("n", "<leader>ob", "<CMD>ObsidianBacklinks<CR>", { desc = "Show backlinks" })
+vim.keymap.set("n", "<leader>ot", "<CMD>ObsidianToday<CR>", { desc = "Open today's daily note" })
+vim.keymap.set("n", "<leader>oy", "<CMD>ObsidianToday -1<CR>", { desc = "Open yesterday's daily note" })
+vim.keymap.set("n", "<leader>om", "<CMD>ObsidianToday 1<CR>", { desc = "Open tomorrow's daily note" })
+vim.keymap.set("n", "<leader>oo", "<CMD>ObsidianOpen<CR>", { desc = "Open note in Obsidian app" })
+vim.keymap.set("n", "<leader>os", "<CMD>ObsidianSearch<CR>", { desc = "Search notes" })
+vim.keymap.set("v", "<leader>ol", "<CMD>ObsidianLink<CR>", { desc = "Link selected text" })
+vim.keymap.set("v", "<leader>oln", "<CMD>ObsidianLinkNew<CR>", { desc = "Link to new note" })
+vim.keymap.set("n", "<leader>oi", "<CMD>ObsidianPasteImg<CR>", { desc = "Paste image" })
+vim.keymap.set("n", "<leader>or", "<CMD>ObsidianRename<CR>", { desc = "Rename note" })
+vim.keymap.set("n", "<leader>oT", "<CMD>ObsidianTemplate<CR>", { desc = "Insert template" })
+vim.keymap.set("n", "<leader>otg", "<CMD>ObsidianTags<CR>", { desc = "Browse tags" })
+
+-- Obsidian specific mappings for markdown files
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "markdown",
+  callback = function()
+    -- Toggle checkboxes
+    vim.keymap.set("n", "<leader>ch", function()
+      require("obsidian").util.toggle_checkbox()
+    end, { buffer = true, desc = "Toggle checkbox" })
+    
+    -- Smart action on Enter (follow links or toggle checkboxes)
+    vim.keymap.set("n", "<CR>", function()
+      return require("obsidian").util.smart_action()
+    end, { buffer = true, expr = true, desc = "Smart action" })
+    
+    -- gf to follow links in Obsidian vault
+    vim.keymap.set("n", "gf", function()
+      return require("obsidian").util.gf_passthrough()
+    end, { buffer = true, expr = true, desc = "Follow link" })
+  end,
+})
