@@ -13,9 +13,6 @@ export PATH=$HOME/.local/bin:$PATH
 # GPG
 export GPG_TTY=$TTY
 
-# asdf
-# . "$HOME/.asdf/asdf.sh"
-
 export MANPAGER="nvim +Man!"
 
 export FZF_DEFAULT_OPTS="--reverse --ansi --color=bg+:-1,fg:15,fg+:-1,prompt:6,header:5,pointer:2,hl:3,hl+:3,spinner:05,info:15,border:15"
@@ -46,6 +43,7 @@ alias templates="auth0 universal-login templates update"
 # Use bat and fd tools
 alias cat="bat"
 alias find="fd"
+alias nnn="nnn -H"
 
 alias pdqui='
 cd ~/Code/ozone
@@ -79,6 +77,12 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
+# MISE is sourced (loaded after nvm so mise takes precedence)
+# export PATH="$HOME/.local/share/mise/shims:$PATH"
+# export PATH=~/.mix/escripts:$PATH
+# Mise configuration
+eval "$(/opt/homebrew/bin/mise activate zsh)"
+
 #######################################################################
 # Greeting
 #######################################################################
@@ -97,3 +101,5 @@ eval "$(zoxide init zsh)"
 
 # Enable Turborepo remote caching
 export TURBO_REMOTE_CACHE=true
+export PATH="$HOME/.yarn-global/bin:$PATH"
+export TMPDIR=$HOME/tmp

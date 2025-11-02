@@ -12,7 +12,7 @@ vim.keymap.set("n", "<UP>", "<CMD>cope<CR>")
 vim.keymap.set("n", "<DOWN>", "<CMD>cclose<CR>")
 vim.keymap.set("n", "<RIGHT>", "<CMD>cnext<CR>")
 vim.keymap.set("n", "<LEFT>", "<CMD>cprev<CR>")
-vim.keymap.set("n", "<leader>s", "<CMD>Neoformat | :w<CR>")
+vim.keymap.set("n", "<leader>s", ":w<CR>")
 vim.keymap.set("n", "<leader>w", "<CMD>q<CR>")
 vim.keymap.set("n", "<leader>q", ":q<CR>")
 vim.keymap.set("n", "<leader>|", ":vsplit<CR>")
@@ -82,21 +82,21 @@ vim.keymap.set("n", "<leader>otg", "<CMD>ObsidianTags<CR>", { desc = "Browse tag
 
 -- Obsidian specific mappings for markdown files
 vim.api.nvim_create_autocmd("FileType", {
-  pattern = "markdown",
-  callback = function()
-    -- Toggle checkboxes
-    vim.keymap.set("n", "<leader>ch", function()
-      require("obsidian").util.toggle_checkbox()
-    end, { buffer = true, desc = "Toggle checkbox" })
-    
-    -- Smart action on Enter (follow links or toggle checkboxes)
-    vim.keymap.set("n", "<CR>", function()
-      return require("obsidian").util.smart_action()
-    end, { buffer = true, expr = true, desc = "Smart action" })
-    
-    -- gf to follow links in Obsidian vault
-    vim.keymap.set("n", "gf", function()
-      return require("obsidian").util.gf_passthrough()
-    end, { buffer = true, expr = true, desc = "Follow link" })
-  end,
+	pattern = "markdown",
+	callback = function()
+		-- Toggle checkboxes
+		vim.keymap.set("n", "<leader>ch", function()
+			require("obsidian").util.toggle_checkbox()
+		end, { buffer = true, desc = "Toggle checkbox" })
+
+		-- Smart action on Enter (follow links or toggle checkboxes)
+		vim.keymap.set("n", "<CR>", function()
+			return require("obsidian").util.smart_action()
+		end, { buffer = true, expr = true, desc = "Smart action" })
+
+		-- gf to follow links in Obsidian vault
+		vim.keymap.set("n", "gf", function()
+			return require("obsidian").util.gf_passthrough()
+		end, { buffer = true, expr = true, desc = "Follow link" })
+	end,
 })

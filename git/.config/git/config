@@ -7,6 +7,7 @@
     pwl = !git push --force-with-lease
     quickfix = !git add . && git commit --amend --no-edit
 		reset = !git reset --soft HEAD~1
+		build = !git commit --allow-empty -m "build" && git push
 [merge]
 	conflictstyle = diff3
 [user]

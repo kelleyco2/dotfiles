@@ -40,6 +40,8 @@ brew "nnn"
 brew "node"
 # Pinentry for GPG on Mac
 brew "pinentry-mac"
+# Fast formatter, linter, bundler for JS, TS, JSON
+brew "biome"
 # Prettier daemon
 brew "prettierd"
 # Protocol buffers (Google's data interchange format)
