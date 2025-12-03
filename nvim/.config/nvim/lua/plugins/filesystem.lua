@@ -61,6 +61,13 @@ return {
 		"luukvbaal/nnn.nvim",
 		config = function()
 			local nnn = require("nnn")
+
+			local function grep_in_dir(files)
+				local target = files[1]
+				local dir = vim.fn.isdirectory(target) == 1 and target or vim.fn.fnamemodify(target, ":h")
+				require("telescope.builtin").live_grep({ search_dirs = { dir } })
+			end
+
 			require("nnn").setup({
 				session = "shared",
 				explorer = {
@@ -74,6 +81,7 @@ return {
 					{ "<C-x>", nnn.builtin.open_in_split }, -- open file(s) in split
 					{ "<C-v>", nnn.builtin.open_in_vsplit }, -- open file(s) in vertical split
 					{ "<C-y>", nnn.builtin.copy_to_clipboard }, -- copy file(s) to clipboard
+					{ "<C-g>", grep_in_dir }, -- grep in selected directory
 				},
 			})
 		end,
