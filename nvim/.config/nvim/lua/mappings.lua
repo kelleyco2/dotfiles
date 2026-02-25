@@ -51,6 +51,10 @@ vim.keymap.set("n", "<leader>pr", "<Cmd>TimerStart 30m Rest<CR>")
 vim.keymap.set("n", "<leader>pp", "<Cmd>TimerPause<CR>")
 vim.keymap.set("n", "<leader>ps", "<Cmd>TimerStop<CR>")
 
+-- Yank file paths
+vim.keymap.set("n", "<leader>yf", '<CMD>let @+=expand("%:.")<CR>')
+vim.keymap.set("n", "<leader>yF", '<CMD>let @+=expand("%:p")<CR>')
+
 -- Copilot complete
 vim.keymap.set("i", "<C-l>", 'copilot#Accept("\\<CR>")', {
 	expr = true,
