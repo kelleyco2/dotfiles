@@ -40,6 +40,9 @@ alias sd="yarn dev:smartdeploy"
 alias ui="yarn dev:ui"
 alias templates="auth0 universal-login templates update"
 
+# elixir server start
+alias ips="iex -S mix phx.server"
+
 # Use bat and fd tools
 alias cat="bat"
 alias find="fd"
@@ -103,3 +106,6 @@ eval "$(zoxide init zsh)"
 export TURBO_REMOTE_CACHE=true
 export PATH="$HOME/.yarn-global/bin:$PATH"
 export TMPDIR=$HOME/tmp
+
+# bun completions
+[ -s "/Users/cooperkelley/.bun/_bun" ] && source "/Users/cooperkelley/.bun/_bun"
