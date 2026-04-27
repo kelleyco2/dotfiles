@@ -11,6 +11,8 @@ Personal dotfiles managed with [GNU Stow](https://www.gnu.org/software/stow/). E
 - **Stow a single package**: `stow --no-folding <package>` (e.g., `stow --no-folding nvim`)
 - **Format Lua files**: `stylua <file>`
 - **Launch project sessions**: `rally` (tmux popup via `prefix + s` — uses fzf to pick a project, then starts a smug session)
+- **Install tmux plugins**: In a tmux session, press `C-a I` (capital I)
+- **Set up GPG**: `~/dotfiles/git/setup-gpg.sh` (interactive — generates key and configures git signing)
 
 ## Architecture
 
@@ -30,17 +32,31 @@ The `--no-folding` flag ensures stow creates individual symlinks rather than sym
 - `plugin/` directory contains auto-loaded scripts (diagnostics config, window resize)
 - LSP servers configured: `elixirls`, `tailwindcss`, `ts_ls`, `biome`
 - Format-on-save is wired through LSP `textDocument/formatting`
+- Key integrations: **Obsidian.nvim** (vault at `~/Code/Oracle`, mappings under `<leader>o`), **Copilot** (`<C-l>` to accept), **pomo.nvim** (`<leader>p` prefix)
+- Mapping conventions: `;`/`:` swapped, `<BS>` swaps alternate buffer, quickfix via arrow keys, search results auto-centered with `zz`
 
 ### Tmux (`tmux/`)
 - Prefix is `C-a` (not default `C-b`)
 - Plugin manager: **tpm** (installed via Homebrew, run line at bottom of `tmux.conf`)
 - `rally` script (`tmux/.local/bin/rally`): fzf-based project launcher that picks from `~/dotfiles/`, `~/Journal/<year>/`, `~/Code/*` and opens a smug session
 - Smug templates in `tmux/.config/smug/` define session layouts (default opens nvim + shell)
+- Key bindings: `prefix + A` opens Claude Code in a split, `prefix + !` kills session, `|`/`-` for splits
+- Pane/window indexes start at 1, mouse enabled, vim-tmux-navigator for seamless pane movement
 
 ### Zsh (`zsh/`)
 - Uses **oh-my-zsh** with `gnzh` theme
-- Runtime version management: **mise** (takes precedence over nvm)
+- Runtime version management: **mise** (takes precedence over nvm); also has **asdf**, **rbenv**, **bun**
 - Common aliases: `cat` → `bat`, `find` → `fd`, `nnn -H`
+- Navigation: **zoxide** for smart directory jumping
+- Shell startup: Google Cloud SDK sourced, custom `TMPDIR=$HOME/tmp`, FZF with reverse layout and custom colors
+
+### Kitty (`kitty/`)
+- JetBrains Mono 14pt with RobotoMono Nerd Font for symbols
+
+### Git (`git/`)
+- Commit and tag signing via GPG (`/opt/homebrew/bin/gpg`)
+- Merge conflict style: `diff3` (three-way diffs)
+- Key aliases: `ac` (add+commit), `cob` (checkout -b), `pwl` (push --force-with-lease), `quickfix` (amend no-edit), `reset` (soft reset HEAD~1), `build` (empty commit for CI triggers)
 
 ## Code Style
 - **Lua**: Format with `stylua`; use `snake_case`; wrap error-prone calls in `pcall`
