@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# Install apex-jorje-lsp.jar from the Salesforce VS Code Apex extension VSIX.
+set -euo pipefail
+DEST="$HOME/.local/share/apex-lsp"
+JAR="$DEST/apex-jorje-lsp.jar"
+mkdir -p "$DEST"
+TMP=$(mktemp -d)
+trap 'rm -rf "$TMP"' EXIT
+
+URL="https://salesforce.gallery.vsassets.io/_apis/public/gallery/publisher/salesforce/extension/salesforcedx-vscode-apex/latest/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage"
+echo "Downloading apex VSIX..."
+curl -fsSL -o "$TMP/apex.vsix" "$URL"
+
+# Path moves between releases (extension/out/, extension/dist/, ...) — discover it.
+INNER=$(unzip -Z1 "$TMP/apex.vsix" | grep -E '/apex-jorje-lsp\.jar$' | head -1)
+if [ -z "$INNER" ]; then
+  echo "Could not find apex-jorje-lsp.jar inside the VSIX." >&2
+  exit 1
+fi
+echo "Extracting $INNER..."
+unzip -p "$TMP/apex.vsix" "$INNER" > "$JAR"
+echo "Installed: $JAR"
+java -version 2>&1 | head -1

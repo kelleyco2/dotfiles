@@ -38,6 +38,8 @@ brew "neovim"
 brew "nnn"
 # Platform built on V8 to build network applications
 brew "node"
+# Salesforce CLI (formula; cask is deprecated 2026-09-01)
+brew "sf"
 # Pinentry for GPG on Mac
 brew "pinentry-mac"
 # Fast formatter, linter, bundler for JS, TS, JSON
@@ -64,6 +66,8 @@ brew "tmux"
 brew "toilet"
 # Plugin manager for tmux
 brew "tpm"
+# Parser generator CLI, required by nvim-treesitter (main branch)
+brew "tree-sitter-cli"
 # Display directories as trees (with optional color/HTML output)
 brew "tree"
 # Shell extension to navigate your filesystem faster
@@ -74,6 +78,8 @@ brew "auth0/auth0-cli/auth0"
 brew "oven-sh/bun/bun"
 cask "font-jetbrains-mono"
 cask "font-roboto-mono-nerd-font"
+# Java runtime for Apex Language Server
+cask "temurin@17"
 # Open-source code editor
 cask "visual-studio-code"
 vscode "bradlc.vscode-tailwindcss"

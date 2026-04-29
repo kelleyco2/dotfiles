@@ -59,6 +59,29 @@ return {
 					return root
 				end,
 			})
+
+			-- Apex (install JAR via ~/.local/bin/install-apex-lsp)
+			local apex_jar = vim.fn.expand("$HOME/.local/share/apex-lsp/apex-jorje-lsp.jar")
+			if vim.fn.filereadable(apex_jar) == 1 then
+				lsp_config.apex_ls.setup({
+					on_attach = on_attach,
+					capabilities = require("cmp_nvim_lsp").default_capabilities(),
+					apex_jar_path = apex_jar,
+					apex_enable_semantic_errors = false,
+					apex_enable_completion_statistics = false,
+					filetypes = { "apex" },
+					root_dir = lsp_config.util.root_pattern("sfdx-project.json", ".git"),
+				})
+			end
+
+			-- Lightning Web Components (npm i -g @salesforce/lwc-language-server)
+			if vim.fn.executable("lwc-language-server") == 1 then
+				lsp_config.lwc_ls.setup({
+					on_attach = on_attach,
+					capabilities = require("cmp_nvim_lsp").default_capabilities(),
+					root_dir = lsp_config.util.root_pattern("sfdx-project.json"),
+				})
+			end
 		end,
 	},
 }

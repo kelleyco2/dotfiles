@@ -82,6 +82,18 @@ return {
 		"HiPhish/rainbow-delimiters.nvim",
 		config = function()
 			require("rainbow-delimiters.setup").setup()
+			-- Guard: lib.attach in 0.9.1 crashes when get_parser returns nil
+			-- (filetypes without an installed parser, e.g. alpha, sosl, prompt).
+			local lib = require("rainbow-delimiters.lib")
+			local original_attach = lib.attach
+			lib.attach = function(bufnr)
+				local ft = vim.bo[bufnr].ft
+				local lang = vim.treesitter.language.get_lang(ft)
+				if not lang then return end
+				local ok, parser = pcall(vim.treesitter.get_parser, bufnr, lang)
+				if not ok or not parser then return end
+				return original_attach(bufnr)
+			end
 		end,
 	},
 	{
