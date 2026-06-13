@@ -4,7 +4,10 @@ root: ${root}
 windows:
   - name: " "
     commands:
+      - claude --continue || claude
+  - name: " "
+    commands:
       - nvim
-  - name: " "
+  - name: " "
     commands:
       - clear

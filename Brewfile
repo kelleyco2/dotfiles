@@ -6,6 +6,8 @@ tap "oven-sh/bun"
 brew "asdf"
 # Clone of cat(1) with syntax highlighting and Git integration
 brew "bat"
+# GNU core utilities (provides gtimeout, gdate, etc.)
+brew "coreutils"
 # New way of working with Protocol Buffers
 brew "buf"
 # Programming language for highly scalable real-time systems
@@ -24,6 +26,12 @@ brew "fd"
 brew "fzf"
 # GitHub command-line tool
 brew "gh"
+# Syntax-highlighting pager for git diffs
+brew "git-delta"
+# Lightweight JSON processor
+brew "jq"
+# Terminal UI for git commands
+brew "lazygit"
 # Validating, recursive, caching DNS resolver
 brew "unbound"
 # GNU Transport Layer Security (TLS) Library

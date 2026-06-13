@@ -1,0 +1,53 @@
+#!/bin/bash
+# Reproducible Claude Code setup for a new machine.
+# Run once after `stow --no-folding claude`. Idempotent — safe to re-run.
+#
+# What it does NOT do: store secrets. The Sanity MCP token is read from the
+# environment ($SANITY_MCP_TOKEN), never committed. Account-level claude.ai
+# servers (Gmail, Calendar) are authenticated interactively in-app, not here.
+
+set -u
+
+echo "==> Registering plugin marketplaces"
+# Official marketplace is built in, but adding is harmless and explicit.
+claude plugin marketplace add anthropics/claude-plugins-official 2>/dev/null || true
+# Community Elixir/Phoenix/LiveView/Ash plugin (marketplace name: oliver-kriska)
+claude plugin marketplace add oliver-kriska/claude-elixir-phoenix 2>/dev/null || true
+
+echo "==> Installing plugins (already-installed is a no-op)"
+OFFICIAL_PLUGINS=(
+  typescript-lsp
+  frontend-design
+  playwright
+  context7
+  github
+  feature-dev
+  security-guidance
+  figma
+  linear
+  greptile
+)
+for p in "${OFFICIAL_PLUGINS[@]}"; do
+  echo "    - ${p}@claude-plugins-official"
+  claude plugin install "${p}@claude-plugins-official" 2>/dev/null || true
+done
+
+echo "    - elixir-phoenix@oliver-kriska"
+claude plugin install "elixir-phoenix@oliver-kriska" 2>/dev/null || true
+
+echo "==> User-scope MCP servers"
+if claude mcp list 2>/dev/null | grep -qi '^Sanity'; then
+  echo "    Sanity already configured, skipping"
+elif [ -n "${SANITY_MCP_TOKEN:-}" ]; then
+  claude mcp add -s user --transport http Sanity https://mcp.sanity.io \
+    --header "Authorization: Bearer ${SANITY_MCP_TOKEN}" \
+    && echo "    Sanity added"
+else
+  echo "    SKIP Sanity: set SANITY_MCP_TOKEN and re-run, or add it in-app with:"
+  echo "      claude mcp add -s user --transport http Sanity https://mcp.sanity.io --header \"Authorization: Bearer <token>\""
+fi
+
+echo
+echo "Done. Note:"
+echo "  - claude.ai Gmail/Calendar MCP servers authenticate interactively in-app."
+echo "  - Run 'claude' and check /plugin to confirm everything is enabled."

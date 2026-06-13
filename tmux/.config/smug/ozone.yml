@@ -2,10 +2,13 @@ session: ozone
 root: ~/Code/ozone/
 
 windows:
-  - name: " "
+  - name: " "
+    commands:
+      - claude --continue || claude
+  - name: " "
     commands:
       - nvim
-  - name: " "
+  - name: " "
     layout: even-horizontal
     commands:
       - clear
@@ -13,6 +16,3 @@ windows:
       - type: horizontal
         commands:
           - ui
-  - name: " "
-    commands:
-      - gh dash

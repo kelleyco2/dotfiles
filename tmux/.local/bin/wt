@@ -1,0 +1,97 @@
+#!/usr/bin/env bash
+# Git worktree helper — works in any repo (infers from $PWD).
+# Creates a sibling worktree, copies gitignored .env files into it, assigns a
+# free dev port (PORT in .env.local, honored by `next dev`), and opens a smug
+# session (claude / nvim / shell) in the new worktree.
+#
+#   wt add <branch> [--no-session]   create worktree + session
+#   wt rm  <branch>                  remove worktree (and its session)
+#   wt ls                            list worktrees for this repo
+
+set -euo pipefail
+
+require_repo() {
+  git rev-parse --show-toplevel >/dev/null 2>&1 || {
+    echo "wt: not inside a git repository" >&2
+    exit 1
+  }
+}
+
+find_free_port() {
+  local p=$1
+  while lsof -nP -iTCP:"$p" -sTCP:LISTEN >/dev/null 2>&1; do
+    p=$((p + 1))
+  done
+  echo "$p"
+}
+
+cmd=${1:-}
+case "$cmd" in
+  add)
+    require_repo
+    branch=${2:-}
+    [ -n "$branch" ] || { echo "Usage: wt add <branch> [--no-session]" >&2; exit 1; }
+    no_session=false
+    [ "${3:-}" = "--no-session" ] && no_session=true
+
+    root=$(git rev-parse --show-toplevel)
+    name=$(basename "$root")
+    parent=$(dirname "$root")
+    safebranch=${branch//\//-}
+    wt="$parent/$name-$safebranch"
+    session="$name-$safebranch"
+
+    # Create the worktree: new branch, falling back to an existing one.
+    git -C "$root" worktree add "$wt" -b "$branch" 2>/dev/null \
+      || git -C "$root" worktree add "$wt" "$branch"
+
+    # Copy gitignored env files (worktrees don't get them — they're untracked).
+    shopt -s nullglob
+    for f in "$root"/.env "$root"/.env.*; do
+      base=$(basename "$f")
+      case "$base" in
+        *.example | *.sample | *.template) continue ;;
+      esac
+      cp "$f" "$wt/$base"
+      echo "  copied $base"
+    done
+    shopt -u nullglob
+
+    # Assign a free dev port via .env.local (next dev honors PORT).
+    port=$(find_free_port 3001)
+    envfile="$wt/.env.local"
+    touch "$envfile"
+    grep -v '^PORT=' "$envfile" > "$envfile.tmp" 2>/dev/null || true
+    mv "$envfile.tmp" "$envfile"
+    echo "PORT=$port" >> "$envfile"
+
+    echo "Worktree ready: $wt  (PORT=$port)"
+
+    if [ "$no_session" = false ]; then
+      smug start default name="$session" root="$wt" -a
+    fi
+    ;;
+
+  rm)
+    require_repo
+    branch=${2:-}
+    [ -n "$branch" ] || { echo "Usage: wt rm <branch>" >&2; exit 1; }
+    root=$(git rev-parse --show-toplevel)
+    name=$(basename "$root")
+    parent=$(dirname "$root")
+    safebranch=${branch//\//-}
+    wt="$parent/$name-$safebranch"
+    tmux kill-session -t "$name-$safebranch" 2>/dev/null || true
+    git -C "$root" worktree remove "$wt"
+    echo "Removed worktree: $wt"
+    ;;
+
+  ls)
+    require_repo
+    git worktree list
+    ;;
+
+  *)
+    echo "Usage: wt [add|rm|ls] [branch] [--no-session]"
+    ;;
+esac
