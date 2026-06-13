@@ -25,7 +25,7 @@ OFFICIAL_PLUGINS=(
   security-guidance
   figma
   linear
-  greptile
+  vercel
 )
 for p in "${OFFICIAL_PLUGINS[@]}"; do
   echo "    - ${p}@claude-plugins-official"
@@ -47,7 +47,15 @@ else
   echo "      claude mcp add -s user --transport http Sanity https://mcp.sanity.io --header \"Authorization: Bearer <token>\""
 fi
 
+# Neon (Postgres) — remote managed MCP, OAuth (no key stored); auth in browser on first use.
+if claude mcp list 2>/dev/null | grep -qi '^neon'; then
+  echo "    Neon already configured, skipping"
+else
+  claude mcp add -s user --transport http neon https://mcp.neon.tech/mcp \
+    && echo "    Neon added (authorize in browser on first use)"
+fi
+
 echo
 echo "Done. Note:"
-echo "  - claude.ai Gmail/Calendar MCP servers authenticate interactively in-app."
+echo "  - claude.ai Gmail/Calendar and Neon MCP servers authenticate interactively in-app."
 echo "  - Run 'claude' and check /plugin to confirm everything is enabled."

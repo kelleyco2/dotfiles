@@ -2,6 +2,24 @@
   "permissions": {
     "defaultMode": "auto"
   },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node ~/.claude/hooks/format.mjs"
+          }
+        ]
+      }
+    ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "node ~/.claude/statusline.js",
+    "padding": 0
+  },
   "enabledPlugins": {
     "typescript-lsp@claude-plugins-official": true,
     "frontend-design@claude-plugins-official": true,
@@ -10,10 +28,10 @@
     "github@claude-plugins-official": true,
     "feature-dev@claude-plugins-official": true,
     "security-guidance@claude-plugins-official": true,
-    "figma@claude-plugins-official": true,
+    "figma@claude-plugins-official": false,
     "linear@claude-plugins-official": true,
-    "greptile@claude-plugins-official": true,
-    "elixir-phoenix@oliver-kriska": true
+    "elixir-phoenix@oliver-kriska": true,
+    "vercel@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "claude-plugins-official": {
@@ -28,24 +46,6 @@
         "repo": "oliver-kriska/claude-elixir-phoenix"
       }
     }
-  },
-  "statusLine": {
-    "type": "command",
-    "command": "node ~/.claude/statusline.js",
-    "padding": 0
-  },
-  "hooks": {
-    "PostToolUse": [
-      {
-        "matcher": "Edit|Write|MultiEdit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node ~/.claude/hooks/format.mjs"
-          }
-        ]
-      }
-    ]
   },
   "alwaysThinkingEnabled": true,
   "effortLevel": "high",
