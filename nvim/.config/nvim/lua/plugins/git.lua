@@ -1,6 +1,17 @@
 return {
 	"tpope/vim-fugitive",
 	{
+		"sindrets/diffview.nvim",
+		dependencies = { "nvim-tree/nvim-web-devicons" },
+		cmd = { "DiffviewOpen", "DiffviewFileHistory" },
+		keys = {
+			{ "<leader>gd", "<cmd>DiffviewOpen<cr>", desc = "Diffview (working tree)" },
+			{ "<leader>gH", "<cmd>DiffviewFileHistory %<cr>", desc = "Diffview file history" },
+			{ "<leader>gq", "<cmd>DiffviewClose<cr>", desc = "Diffview close" },
+		},
+		opts = {},
+	},
+	{
 		"lewis6991/gitsigns.nvim",
 		config = function()
 			local gitsigns = require("gitsigns")

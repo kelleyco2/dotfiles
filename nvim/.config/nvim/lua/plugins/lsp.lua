@@ -37,7 +37,8 @@ return {
 				},
 			})
 
-			vim.lsp.config("ts_ls", {
+			-- vtsls: faster/leaner TS server than ts_ls. Install: npm i -g @vtsls/language-server
+			vim.lsp.config("vtsls", {
 				root_markers = { "package.json", "tsconfig.json", "jsconfig.json", ".git" },
 				cmd_env = {
 					TMPDIR = vim.fn.expand("$HOME") .. "/tmp",
@@ -45,7 +46,7 @@ return {
 			})
 
 			-- tailwindcss and biome use their default configs (+ global capabilities).
-			local servers = { "elixirls", "tailwindcss", "ts_ls", "biome" }
+			local servers = { "elixirls", "tailwindcss", "vtsls", "biome" }
 
 			-- Apex (install JAR via ~/.local/bin/install-apex-lsp)
 			local apex_jar = vim.fn.expand("$HOME/.local/share/apex-lsp/apex-jorje-lsp.jar")

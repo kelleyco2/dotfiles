@@ -22,7 +22,6 @@ vim.keymap.set("n", "<leader>e", "<CMD>NnnPicker %:p<CR>")
 vim.keymap.set("n", "<leader>gg", "<CMD>G<CR>")
 vim.keymap.set("n", "<leader>gl", "<CMD>Gclog<CR>")
 vim.keymap.set("n", "<leader>gh", "<CMD>0Gclog<CR>")
-vim.keymap.set("n", "<leader>gd", "<CMD>Gvdiffsplit<CR>")
 vim.keymap.set("n", "<leader>ty", "<CMD>TSC<CR>")
 vim.keymap.set("n", "<leader>l", "<CMD>Telescope lsp_document_symbols<CR>")
 

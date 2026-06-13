@@ -109,3 +109,14 @@ export TMPDIR=$HOME/tmp
 
 # bun completions
 [ -s "/Users/cooperkelley/.bun/_bun" ] && source "/Users/cooperkelley/.bun/_bun"
+
+# fzf keybindings + completion (Ctrl-R history, Ctrl-T files, Alt-C cd)
+command -v fzf >/dev/null && source <(fzf --zsh)
+
+# Fish-style autosuggestions
+[ -f /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh ] && \
+  source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+# Syntax highlighting (must be sourced last)
+[ -f /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ] && \
+  source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
