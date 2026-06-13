@@ -8,7 +8,7 @@
 #   ○          (dim)    — project not running; Enter launches a smug session
 #
 # Enter switches into a running session, or launches one for a project, and
-# jumps in. Works inside or outside tmux. Fast: only two tmux calls per open.
+# jumps in. Ctrl-X kills the highlighted session. Works inside or outside tmux.
 
 set -euo pipefail
 
@@ -56,74 +56,80 @@ if [[ "${1:-}" == "--preview" ]]; then
 fi
 
 inside_tmux() { [[ -n "${TMUX:-}" ]]; }
-
-ACTIVE_SECS=5 # output within this many seconds counts as "working"
-now=$(date +%s)
-
-# Two tmux calls total: running session names, and all panes (for Claude state).
-running=$(tmux list-sessions -F '#{session_name}' 2>/dev/null || true)
-panes=$(tmux list-panes -a \
-  -F '#{session_name}|#{window_name}|#{pane_current_command}|#{window_activity}' 2>/dev/null || true)
-
-NL=$'\n'
-is_running() { [[ "$NL$running$NL" == *"$NL$1$NL"* ]]; }
 is_shell() { case "$1" in zsh | bash | fish | sh | -zsh | -bash) return 0 ;; *) return 1 ;; esac; }
-
-# ANSI 256 colours
 g() { printf '\033[38;5;%sm%s\033[0m' "$1" "$2"; } # g <color> <text>
 
-# Buckets so we can order: waiting → working → idle → projects.
-waiting=""
-working=""
-idle=""
-projects=""
+# Build the candidate list. Recomputed on each call so fzf `reload` reflects
+# sessions killed via Ctrl-X. Order: waiting → working → idle → projects.
+build_list() {
+  local ACTIVE_SECS=5 now running panes NL sess cmd act s w c a d name JOURNAL
+  local waiting="" working="" idle="" projects=""
+  now=$(date +%s)
+  running=$(tmux list-sessions -F '#{session_name}' 2>/dev/null || true)
+  panes=$(tmux list-panes -a \
+    -F '#{session_name}|#{window_name}|#{pane_current_command}|#{window_activity}' 2>/dev/null || true)
+  NL=$'\n'
 
-# Classify each running session by its claude window's command + activity.
-for sess in $running; do
-  [[ -n "$sess" ]] || continue
-  cmd=""
-  act=""
-  while IFS='|' read -r s w c a; do
-    if [[ "$s" == "$sess" && "$w" == "$CLAUDE_WIN" ]]; then
-      cmd=$c
-      act=$a
-      break
+  for sess in $running; do
+    [[ -n "$sess" ]] || continue
+    cmd=""
+    act=""
+    while IFS='|' read -r s w c a; do
+      if [[ "$s" == "$sess" && "$w" == "$CLAUDE_WIN" ]]; then
+        cmd=$c
+        act=$a
+        break
+      fi
+    done <<< "$panes"
+
+    if [[ -z "$cmd" ]] || is_shell "$cmd"; then
+      idle+="$(g 244 ●) $sess${TAB}switch${TAB}$sess"$'\n'
+    elif [[ -n "$act" && $((now - act)) -le $ACTIVE_SECS ]]; then
+      working+="$(g 214 ●) $sess  $(g 240 working)${TAB}switch${TAB}$sess"$'\n'
+    else
+      waiting+="$(g 42 ●) $sess  $(g 42 waiting)${TAB}switch${TAB}$sess"$'\n'
     fi
-  done <<< "$panes"
+  done
 
-  if [[ -z "$cmd" ]] || is_shell "$cmd"; then
-    line="$(g 244 ●) $sess${TAB}switch${TAB}$sess"$'\n'
-    idle+="$line"
-  elif [[ -n "$act" && $((now - act)) -le $ACTIVE_SECS ]]; then
-    line="$(g 214 ●) $sess  $(g 240 working)${TAB}switch${TAB}$sess"$'\n'
-    working+="$line"
-  else
-    line="$(g 42 ●) $sess  $(g 42 waiting)${TAB}switch${TAB}$sess"$'\n'
-    waiting+="$line"
+  local dirs=("$HOME/dotfiles")
+  JOURNAL="$HOME/Journal/$(date +%Y)"
+  [[ -d "$JOURNAL" ]] && dirs+=("$JOURNAL")
+  dirs+=("$HOME"/Code/*/)
+  for d in "${dirs[@]}"; do
+    d=${d%/}
+    [[ -d "$d" ]] || continue
+    name=${d##*/}
+    name=${name//./_}
+    [[ "$NL$running$NL" == *"$NL$name$NL"* ]] && continue
+    projects+="$(g 240 ○) $name${TAB}start${TAB}$d"$'\n'
+  done
+
+  printf '%s' "$waiting$working$idle$projects"
+}
+
+# ---- list mode (initial list + fzf `reload` after a kill) -------------------
+if [[ "${1:-}" == "--list" ]]; then
+  build_list
+  exit 0
+fi
+
+# ---- kill mode (Ctrl-X): kill the highlighted session -----------------------
+if [[ "${1:-}" == "--kill" ]]; then
+  line=${2:-}
+  if [[ "$(printf '%s' "$line" | cut -f2)" == switch ]]; then
+    tmux kill-session -t "=$(printf '%s' "$line" | cut -f3)" 2>/dev/null || true
   fi
-done
+  exit 0
+fi
 
-# Launchable projects (skip any already running). No per-dir subprocess.
-dirs=("$HOME/dotfiles")
-JOURNAL="$HOME/Journal/$(date +%Y)"
-[[ -d "$JOURNAL" ]] && dirs+=("$JOURNAL")
-dirs+=("$HOME"/Code/*/)
-for d in "${dirs[@]}"; do
-  d=${d%/}
-  [[ -d "$d" ]] || continue
-  name=${d##*/}
-  name=${name//./_}
-  is_running "$name" && continue
-  projects+="$(g 240 ○) $name${TAB}start${TAB}$d"$'\n'
-done
-
-HEADER="$(g 42 ●) waiting   $(g 214 ●) working   $(g 240 ○) launch"
-SEL=$(printf '%s' "$waiting$working$idle$projects" | fzf \
+HEADER="$(g 42 ●) waiting   $(g 214 ●) working   $(g 240 ○) launch   $(g 244 "^X kill")"
+SEL=$("$0" --list | fzf \
   --ansi --delimiter="$TAB" --with-nth=1 \
   --header="$HEADER" --header-first \
   --prompt="🔮 " \
   --preview "'$0' --preview {}" \
-  --preview-window=right,55%) || exit 0
+  --preview-window=right,55% \
+  --bind "ctrl-x:execute-silent('$0' --kill {})+reload('$0' --list)") || exit 0
 [[ -n "$SEL" ]] || exit 0
 
 ACTION=$(printf '%s' "$SEL" | cut -f2)
