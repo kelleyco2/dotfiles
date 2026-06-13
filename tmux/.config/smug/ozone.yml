@@ -2,13 +2,13 @@ session: ozone
 root: ~/Code/ozone/
 
 windows:
-  - name: " "
+  - name: claude
     commands:
       - claude --continue || claude
-  - name: " "
+  - name: nvim
     commands:
       - nvim
-  - name: " "
+  - name: dev
     layout: even-horizontal
     commands:
       - clear

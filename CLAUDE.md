@@ -10,9 +10,8 @@ Personal dotfiles managed with [GNU Stow](https://www.gnu.org/software/stow/). E
 - **Install Homebrew packages only**: `brew bundle`
 - **Stow a single package**: `stow --no-folding <package>` (e.g., `stow --no-folding nvim`)
 - **Format Lua files**: `stylua <file>`
-- **Launch project sessions**: `rally` (tmux popup via `prefix + s` — uses fzf to pick a project, then starts a smug session)
+- **Session hub**: `prefix + s` (tmux popup running `hub`) — fzf over running tmux sessions (● switch into) and projects (○ launch a smug `claude`/`nvim`/`shell` session). Replaces the old rally/switch/Claude bindings. The `rally` script still exists for direct project launch.
 - **Parallel worktrees**: `wt add <branch>` (creates a sibling git worktree, copies gitignored `.env*` files into it, assigns a free `PORT` in `.env.local`, and opens a smug/Claude session); `wt rm <branch>`, `wt ls`
-- **Open Claude session in a split**: `prefix + A` (capital A); **open the Claude agents hub**: `prefix + a` (lowercase — `claude agents` popup); **resume a past session**: `prefix + r` (`claude --resume` picker in a popup)
 - **Install tmux plugins**: In a tmux session, press `C-a I` (capital I)
 - **Set up Claude Code on a new machine**: `claude-bootstrap` (idempotent — registers plugin marketplaces, installs plugins, adds the Sanity user-scope MCP server from `$SANITY_MCP_TOKEN`)
 - **Set up GPG**: `~/dotfiles/git/setup-gpg.sh` (interactive — generates key and configures git signing)

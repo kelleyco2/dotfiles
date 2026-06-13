@@ -2,12 +2,12 @@ session: ${name}
 root: ${root}
 
 windows:
-  - name: " "
+  - name: claude
     commands:
       - claude --continue || claude
-  - name: " "
+  - name: nvim
     commands:
       - nvim
-  - name: " "
+  - name: shell
     commands:
       - clear

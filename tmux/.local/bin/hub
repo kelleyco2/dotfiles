@@ -1,0 +1,65 @@
+#!/bin/sh
+# Session hub: one fzf picker over running tmux sessions (●) and launchable
+# projects (○). Enter switches into a running session, or launches a new smug
+# session (claude / nvim / shell) for a project and jumps in. Works inside or
+# outside tmux.
+
+set -eu
+
+TAB=$(printf '\t')
+
+# Preview mode — invoked by fzf as: hub --preview <line>
+if [ "${1:-}" = "--preview" ]; then
+  line=${2:-}
+  act=$(printf '%s' "$line" | cut -f2)
+  arg=$(printf '%s' "$line" | cut -f3)
+  if [ "$act" = switch ]; then
+    tmux list-windows -t "=$arg" \
+      -F '#{window_index}: #{window_name}#{?window_active, ←,}' 2>/dev/null
+  else
+    eza --tree --icons --level 2 --git-ignore "$arg" 2>/dev/null || ls -1 "$arg"
+  fi
+  exit 0
+fi
+
+inside_tmux() { [ -n "${TMUX:-}" ]; }
+
+build_list() {
+  # Running sessions first (marked ●).
+  tmux list-sessions -F "● #{session_name}${TAB}switch${TAB}#{session_name}" 2>/dev/null || true
+  # Launchable projects (skip any already running as a session).
+  JOURNAL="$HOME/Journal/$(date +%Y)"
+  set -- "$HOME/dotfiles"
+  [ -d "$JOURNAL" ] && set -- "$@" "$JOURNAL"
+  set -- "$@" "$HOME"/Code/*
+  for d in "$@"; do
+    [ -d "$d" ] || continue
+    name=$(basename "$d" | tr '.' '_')
+    tmux has-session -t "=$name" 2>/dev/null && continue
+    printf '○ %s%sstart%s%s\n' "$name" "$TAB" "$TAB" "$d"
+  done
+}
+
+SEL=$(build_list | fzf \
+  --delimiter="$TAB" --with-nth=1 \
+  --header="● switch   ○ launch" --header-first \
+  --prompt="🔮 " \
+  --preview "'$0' --preview {}" \
+  --preview-window=right,55%) || exit 0
+[ -n "$SEL" ] || exit 0
+
+ACTION=$(printf '%s' "$SEL" | cut -f2)
+ARG=$(printf '%s' "$SEL" | cut -f3)
+
+case "$ACTION" in
+  switch)
+    if inside_tmux; then tmux switch-client -t "=$ARG"; else tmux attach -t "=$ARG"; fi
+    ;;
+  start)
+    name=$(basename "$ARG" | tr '.' '_')
+    ATTACH=""
+    inside_tmux && ATTACH="-a"
+    # shellcheck disable=SC2086
+    smug start "$name" $ATTACH 2>/dev/null || smug start default name="$name" root="$ARG" $ATTACH
+    ;;
+esac
