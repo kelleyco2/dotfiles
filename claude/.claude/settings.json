@@ -47,6 +47,7 @@
       }
     }
   },
+  "editorMode": "vim",
   "alwaysThinkingEnabled": true,
   "effortLevel": "high",
   "skipDangerousModePermissionPrompt": true,

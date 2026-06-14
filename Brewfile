@@ -32,6 +32,10 @@ brew "git-delta"
 brew "jq"
 # Terminal UI for git commands
 brew "lazygit"
+# TUI client for browsing SQL databases
+brew "lazysql"
+# Render images in the terminal (kitty graphics / sixel)
+brew "timg"
 # Validating, recursive, caching DNS resolver
 brew "unbound"
 # GNU Transport Layer Security (TLS) Library
