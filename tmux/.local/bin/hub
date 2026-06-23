@@ -1,0 +1,140 @@
+#!/usr/bin/env bash
+# Session hub: one fzf picker over running tmux sessions and launchable projects.
+#
+# Running sessions show Claude's state in their `claude` window:
+#   ● waiting  (green)  — Claude is idle, waiting for your input  ← sorted on top
+#   ● working  (amber)  — Claude is actively producing output
+#   ●          (gray)   — session running, Claude not in its window
+#   ○          (dim)    — project not running; Enter launches a smug session
+#
+# Enter switches into a running session, or launches one for a project, and
+# jumps in. Ctrl-X kills the highlighted session. Works inside or outside tmux.
+
+set -euo pipefail
+. "$HOME/.local/bin/_session-lib.sh"
+
+TAB=$'\t'
+CLAUDE_WIN="claude" # window name our smug templates use for Claude
+
+# ---- preview mode (invoked by fzf as: hub --preview <line>) ------------------
+if [[ "${1:-}" == "--preview" ]]; then
+  line=${2:-}
+  act=$(printf '%s' "$line" | cut -f2)
+  arg=$(printf '%s' "$line" | cut -f3)
+  # A launchable project is a path; a running session resolves to its cwd.
+  if [[ "$act" == switch ]]; then
+    dir=$(tmux list-panes -t "=$arg:$CLAUDE_WIN" -F '#{pane_current_path}' 2>/dev/null | head -1 || true)
+    [[ -n "$dir" ]] || dir=$(tmux list-panes -t "=$arg" -F '#{pane_current_path}' 2>/dev/null | head -1 || true)
+  else
+    dir=$arg
+  fi
+  [[ -n "${dir:-}" && -d "$dir" ]] || exit 0
+
+  if git -C "$dir" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    branch=$(git -C "$dir" rev-parse --abbrev-ref HEAD 2>/dev/null || echo '?')
+    dirty=$(git -C "$dir" status --porcelain 2>/dev/null | wc -l | tr -d ' ')
+    ab=""
+    if git -C "$dir" rev-parse --abbrev-ref '@{u}' >/dev/null 2>&1; then
+      set -- $(git -C "$dir" rev-list --left-right --count '@{u}...HEAD' 2>/dev/null || echo '0 0')
+      if [[ "${2:-0}" != 0 ]]; then ab+=" ↑${2}"; fi
+      if [[ "${1:-0}" != 0 ]]; then ab+=" ↓${1}"; fi
+    fi
+    printf '\033[35m %s\033[0m%s  \033[38;5;240m%s changed\033[0m\n\n' "$branch" "$ab" "$dirty"
+    if [[ "$dirty" != 0 ]]; then
+      git -C "$dir" -c color.status=always status -s 2>/dev/null | head -14 || true
+      stat=$(git -C "$dir" diff HEAD --shortstat 2>/dev/null | sed 's/^ *//')
+      if [[ -n "$stat" ]]; then printf '\033[38;5;240m%s\033[0m\n' "$stat"; fi
+    else
+      printf '\033[38;5;240m✓ working tree clean\033[0m\n'
+    fi
+    printf '\n\033[38;5;238m── recent ──────────\033[0m\n\n'
+    git -C "$dir" -c color.ui=always log -6 \
+      --format='%C(yellow)%h %C(238)%ar%Creset %s' 2>/dev/null || true
+  else
+    eza --tree --icons --level 2 --git-ignore "$dir" 2>/dev/null || ls -1 "$dir"
+  fi
+  exit 0
+fi
+
+inside_tmux() { [[ -n "${TMUX:-}" ]]; }
+is_shell() { case "$1" in zsh | bash | fish | sh | -zsh | -bash) return 0 ;; *) return 1 ;; esac; }
+g() { printf '\033[38;5;%sm%s\033[0m' "$1" "$2"; } # g <color> <text>
+
+# Build the candidate list. Recomputed on each call so fzf `reload` reflects
+# sessions killed via Ctrl-X. Order: waiting → working → idle → projects.
+build_list() {
+  local ACTIVE_SECS=5 now running panes NL sess cmd act s w c a d name
+  local waiting="" working="" idle="" projects=""
+  now=$(date +%s)
+  running=$(tmux list-sessions -F '#{session_name}' 2>/dev/null || true)
+  panes=$(tmux list-panes -a \
+    -F '#{session_name}|#{window_name}|#{pane_current_command}|#{window_activity}' 2>/dev/null || true)
+  NL=$'\n'
+
+  for sess in $running; do
+    [[ -n "$sess" ]] || continue
+    cmd=""
+    act=""
+    while IFS='|' read -r s w c a; do
+      if [[ "$s" == "$sess" && "$w" == "$CLAUDE_WIN" ]]; then
+        cmd=$c
+        act=$a
+        break
+      fi
+    done <<< "$panes"
+
+    if [[ -z "$cmd" ]] || is_shell "$cmd"; then
+      idle+="$(g 244 ●) $sess${TAB}switch${TAB}$sess"$'\n'
+    elif [[ -n "$act" && $((now - act)) -le $ACTIVE_SECS ]]; then
+      working+="$(g 214 ●) $sess  $(g 240 working)${TAB}switch${TAB}$sess"$'\n'
+    else
+      waiting+="$(g 42 ●) $sess  $(g 42 waiting)${TAB}switch${TAB}$sess"$'\n'
+    fi
+  done
+
+  while IFS= read -r d; do
+    name=${d##*/}
+    name=${name//./_}
+    [[ "$NL$running$NL" == *"$NL$name$NL"* ]] && continue
+    projects+="$(g 240 ○) $name${TAB}start${TAB}$d"$'\n'
+  done < <(project_dirs)
+
+  printf '%s' "$waiting$working$idle$projects"
+}
+
+# ---- list mode (initial list + fzf `reload` after a kill) -------------------
+if [[ "${1:-}" == "--list" ]]; then
+  build_list
+  exit 0
+fi
+
+# ---- kill mode (Ctrl-X): kill the highlighted session -----------------------
+if [[ "${1:-}" == "--kill" ]]; then
+  line=${2:-}
+  if [[ "$(printf '%s' "$line" | cut -f2)" == switch ]]; then
+    tmux kill-session -t "=$(printf '%s' "$line" | cut -f3)" 2>/dev/null || true
+  fi
+  exit 0
+fi
+
+HEADER="$(g 42 ●) waiting   $(g 214 ●) working   $(g 240 ○) launch   $(g 244 "^X kill")"
+SEL=$("$0" --list | fzf \
+  --ansi --delimiter="$TAB" --with-nth=1 \
+  --header="$HEADER" --header-first \
+  --prompt="🔮 " \
+  --preview "'$0' --preview {}" \
+  --preview-window=right,55% \
+  --bind "ctrl-x:execute-silent('$0' --kill {})+reload('$0' --list)") || exit 0
+[[ -n "$SEL" ]] || exit 0
+
+ACTION=$(printf '%s' "$SEL" | cut -f2)
+ARG=$(printf '%s' "$SEL" | cut -f3)
+
+case "$ACTION" in
+  switch)
+    if inside_tmux; then tmux switch-client -t "=$ARG"; else tmux attach -t "=$ARG"; fi
+    ;;
+  start)
+    smug_launch "${ARG##*/}" "$ARG"
+    ;;
+esac

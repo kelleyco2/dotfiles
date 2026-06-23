@@ -47,3 +47,19 @@ vim.wo.relativenumber = true
 vim.opt.conceallevel = 1
 
 vim.g.copilot_filetypes = { gitcommit = true }
+
+-- Auto-reload files changed on disk (e.g. edits the agent makes while a buffer
+-- is open). Pairs with tmux `focus-events on`.
+vim.opt.autoread = true
+vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold", "CursorHoldI", "TermLeave" }, {
+	callback = function()
+		if vim.fn.mode() ~= "c" and vim.fn.getcmdwintype() == "" then
+			vim.cmd("checktime")
+		end
+	end,
+})
+vim.api.nvim_create_autocmd("FileChangedShellPost", {
+	callback = function()
+		vim.notify("File reloaded — changed on disk", vim.log.levels.WARN)
+	end,
+})

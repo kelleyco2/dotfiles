@@ -6,6 +6,8 @@ tap "oven-sh/bun"
 brew "asdf"
 # Clone of cat(1) with syntax highlighting and Git integration
 brew "bat"
+# GNU core utilities (provides gtimeout, gdate, etc.)
+brew "coreutils"
 # New way of working with Protocol Buffers
 brew "buf"
 # Programming language for highly scalable real-time systems
@@ -24,6 +26,16 @@ brew "fd"
 brew "fzf"
 # GitHub command-line tool
 brew "gh"
+# Syntax-highlighting pager for git diffs
+brew "git-delta"
+# Lightweight JSON processor
+brew "jq"
+# Terminal UI for git commands
+brew "lazygit"
+# TUI client for browsing SQL databases
+brew "lazysql"
+# Render images in the terminal (kitty graphics / sixel)
+brew "timg"
 # Validating, recursive, caching DNS resolver
 brew "unbound"
 # GNU Transport Layer Security (TLS) Library
@@ -72,6 +84,10 @@ brew "tree-sitter-cli"
 brew "tree"
 # Shell extension to navigate your filesystem faster
 brew "zoxide"
+# Fish-style autosuggestions for zsh
+brew "zsh-autosuggestions"
+# Syntax highlighting for the zsh command line
+brew "zsh-syntax-highlighting"
 # Build, manage and test your Auth0 integrations from the command line
 brew "auth0/auth0-cli/auth0"
 # Incredibly fast JavaScript runtime, bundler, transpiler and package manager - all in one.

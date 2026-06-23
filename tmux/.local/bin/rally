@@ -1,7 +1,9 @@
 #!/bin/sh
 
 set -eu
-TARGET=$(ls -d ~/dotfiles/ ~/Journal/$(date +%Y)/ ~/Code/* | fzf --header-first --header="Launch Project" --prompt="🔮 " --preview "eza --tree --icons --level 3 --git-ignore {}")
-NAME=$(basename $TARGET)
-NAME=$(echo "$NAME" | tr '.' '_')
-smug start $NAME -a 2>/dev/null || smug start default name=$NAME root=$TARGET -a
+. "$HOME/.local/bin/_session-lib.sh"
+
+TARGET=$(project_dirs | fzf --header-first --header="Launch Project" --prompt="🔮 " --preview "eza --tree --icons --level 3 --git-ignore {}")
+[ -n "$TARGET" ] || exit 0
+
+smug_launch "$(basename "$TARGET")" "$TARGET"

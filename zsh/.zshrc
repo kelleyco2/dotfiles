@@ -15,6 +15,10 @@ export GPG_TTY=$TTY
 
 export MANPAGER="nvim +Man!"
 
+# Default editor (Claude Code's Ctrl-G external edit, git commit/rebase, etc.)
+export EDITOR="nvim"
+export VISUAL="nvim"
+
 export FZF_DEFAULT_OPTS="--reverse --ansi --color=bg+:-1,fg:15,fg+:-1,prompt:6,header:5,pointer:2,hl:3,hl+:3,spinner:05,info:15,border:15"
 
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
@@ -32,8 +36,8 @@ source $ZSH/oh-my-zsh.sh
 # For a full list of active aliases, run `alias`.
 alias -g R="| rg"
 alias -g CC="| pbcopy"
-alias zshconfig="code ~/.zshrc"
-alias gitconfig="code ~/.gitconfig"
+alias zshconfig="nvim ~/.zshrc"
+alias gitconfig="nvim ~/.config/git/config"
 alias pdq="yarn dev:pdq"
 alias smdm="yarn dev:simplemdm"
 alias sd="yarn dev:smartdeploy"
@@ -47,6 +51,9 @@ alias ips="iex -S mix phx.server"
 alias cat="bat"
 alias find="fd"
 alias nnn="nnn -H"
+
+# View images inline in kitty (e.g. Playwright screenshots): icat shot.png
+alias icat="kitty +kitten icat"
 
 alias pdqui='
 cd ~/Code/ozone
@@ -109,3 +116,14 @@ export TMPDIR=$HOME/tmp
 
 # bun completions
 [ -s "/Users/cooperkelley/.bun/_bun" ] && source "/Users/cooperkelley/.bun/_bun"
+
+# fzf keybindings + completion (Ctrl-R history, Ctrl-T files, Alt-C cd)
+command -v fzf >/dev/null && source <(fzf --zsh)
+
+# Fish-style autosuggestions
+[ -f /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh ] && \
+  source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+# Syntax highlighting (must be sourced last)
+[ -f /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ] && \
+  source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh

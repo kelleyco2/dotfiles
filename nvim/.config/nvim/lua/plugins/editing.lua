@@ -4,14 +4,6 @@ return {
 		config = true,
 	},
 	{
-		"ggandor/leap.nvim",
-		config = function()
-			local leap = require("leap")
-			leap.add_default_mappings()
-			leap.opts.safe_labels = {}
-		end,
-	},
-	{
 		"kylechui/nvim-surround",
 		version = "*", -- Use for stability; omit to use `main` branch for the latest features
 		event = "VeryLazy",

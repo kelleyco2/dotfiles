@@ -3,15 +3,17 @@
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## What This Is
-Personal dotfiles managed with [GNU Stow](https://www.gnu.org/software/stow/). Each top-level directory (`nvim/`, `zsh/`, `tmux/`, `kitty/`, `git/`, `dots/`) is a stow package — its contents mirror the home directory structure and get symlinked into `~`.
+Personal dotfiles managed with [GNU Stow](https://www.gnu.org/software/stow/). Each top-level directory (`nvim/`, `zsh/`, `tmux/`, `kitty/`, `git/`, `claude/`, `dots/`) is a stow package — its contents mirror the home directory structure and get symlinked into `~`.
 
 ## Commands
 - **Install everything**: `~/dotfiles/dots/.local/bin/dots` (runs `brew bundle` then `stow --no-folding */`)
 - **Install Homebrew packages only**: `brew bundle`
 - **Stow a single package**: `stow --no-folding <package>` (e.g., `stow --no-folding nvim`)
 - **Format Lua files**: `stylua <file>`
-- **Launch project sessions**: `rally` (tmux popup via `prefix + s` — uses fzf to pick a project, then starts a smug session)
+- **Session hub**: `prefix + s` (tmux popup running `hub`) — fzf over running tmux sessions (● switch into) and projects (○ launch a smug `claude`/`nvim`/`shell` session). Replaces the old rally/switch/Claude bindings. The `rally` script still exists for direct project launch.
+- **Parallel worktrees**: `wt add <branch>` (creates a sibling git worktree, copies gitignored `.env*` files into it, assigns a free `PORT` in `.env.local`, and opens a smug/Claude session); `wt rm <branch>`, `wt ls`
 - **Install tmux plugins**: In a tmux session, press `C-a I` (capital I)
+- **Set up Claude Code on a new machine**: `claude-bootstrap` (idempotent — registers plugin marketplaces, installs plugins, adds the Sanity user-scope MCP server from `$SANITY_MCP_TOKEN`)
 - **Set up GPG**: `~/dotfiles/git/setup-gpg.sh` (interactive — generates key and configures git signing)
 
 ## Architecture
@@ -38,9 +40,9 @@ The `--no-folding` flag ensures stow creates individual symlinks rather than sym
 ### Tmux (`tmux/`)
 - Prefix is `C-a` (not default `C-b`)
 - Plugin manager: **tpm** (installed via Homebrew, run line at bottom of `tmux.conf`)
-- `rally` script (`tmux/.local/bin/rally`): fzf-based project launcher that picks from `~/dotfiles/`, `~/Journal/<year>/`, `~/Code/*` and opens a smug session
-- Smug templates in `tmux/.config/smug/` define session layouts (default opens nvim + shell)
-- Key bindings: `prefix + A` opens Claude Code in a split, `prefix + !` kills session, `|`/`-` for splits
+- Project launchers (`tmux/.local/bin/`): `hub` (the session hub) and `rally` pick a project from `~/dotfiles/` and `~/Code/*` and open a smug session; `wt` does the same for a worktree. Shared list/launch logic lives in `_session-lib.sh` (sourced by all three).
+- Smug templates in `tmux/.config/smug/` define session layouts (default opens claude / nvim / shell)
+- Key bindings: `prefix + s` opens the session hub (popup), `prefix + !` kills session, `|`/`-` for splits, `prefix + r` reloads the config
 - Pane/window indexes start at 1, mouse enabled, vim-tmux-navigator for seamless pane movement
 
 ### Zsh (`zsh/`)
@@ -56,7 +58,19 @@ The `--no-folding` flag ensures stow creates individual symlinks rather than sym
 ### Git (`git/`)
 - Commit and tag signing via GPG (`/opt/homebrew/bin/gpg`)
 - Merge conflict style: `diff3` (three-way diffs)
+- Pager: **delta** (`core.pager`, `interactive.diffFilter`, with `navigate` + line numbers); **lazygit** available as a TUI
 - Key aliases: `ac` (add+commit), `cob` (checkout -b), `pwl` (push --force-with-lease), `quickfix` (amend no-edit), `reset` (soft reset HEAD~1), `build` (empty commit for CI triggers)
+
+### Claude Code (`claude/.claude/`)
+Portable, version-controlled Claude Code config, symlinked into `~/.claude/`. **Only portable config is synced** — machine-local/secret state (sessions, history, `projects/`, `plugins/cache/`, credentials, `~/.claude.json`) is deliberately left out (kept in real dirs under `~/.claude` by `--no-folding`, with a safety-net blocklist in the repo-root `.gitignore`).
+- `settings.json` — portable prefs + `enabledPlugins` (which plugins are on)
+- `CLAUDE.md` — global instructions / stack context (Next.js-first, Elixir secondary)
+- `skills/` — personal skills incl. the custom `nextjs-conventions` and `elixir-architect` plus the design-skill set
+- `agents/nextjs-reviewer.md`, `commands/run-tests.md` — custom global subagent + slash command
+- `statusline.js` — statusline (model · dir · git branch · lines · cost), wired via `settings.json` `statusLine`
+- `hooks/format.mjs` — PostToolUse hook; after Claude edits a file it runs the project's own formatter (Biome/Prettier for web, `mix format`, `stylua`) — only when that tooling is already configured, never imposed
+- `.local/bin/claude-bootstrap` — re-installs plugins/marketplaces and re-adds user-scope MCP servers on a new machine (run once after stow)
+- **Caveat**: a symlinked `settings.json` can be replaced by Claude's in-app writes; treat the repo copy as source of truth and re-run `stow --no-folding claude` if the symlink is orphaned.
 
 ## Code Style
 - **Lua**: Format with `stylua`; use `snake_case`; wrap error-prone calls in `pcall`

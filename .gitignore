@@ -1,0 +1,29 @@
+# --- Claude Code: machine-local / secret state (never commit) ---
+# These live in ~/.claude as real files (kept out of the repo by `stow --no-folding`).
+# Rules here are a safety net in case any get copied into the package by hand.
+# NOTE: ~/.claude.json (in $HOME, holds OAuth tokens + per-project state) is NOT
+# managed by this repo at all — do not add it.
+claude/.claude/projects/
+claude/.claude/sessions/
+claude/.claude/session-env/
+claude/.claude/shell-snapshots/
+claude/.claude/tasks/
+claude/.claude/file-history/
+claude/.claude/telemetry/
+claude/.claude/cache/
+claude/.claude/paste-cache/
+claude/.claude/debug/
+claude/.claude/plans/
+claude/.claude/backups/
+claude/.claude/plugins/cache/
+claude/.claude/plugins/marketplaces/
+claude/.claude/plugins/repos/
+claude/.claude/security/
+claude/.claude/history.jsonl
+claude/.claude/stats-cache.json
+claude/.claude/.credentials.json
+claude/.claude/mcp-needs-auth-cache.json
+claude/.claude/security_warnings_state_*.json
+claude/.claude/.last-update-result.json
+claude/.claude/.last-cleanup
+claude/.claude/settings.local.json
