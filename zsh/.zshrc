@@ -42,7 +42,6 @@ alias pdq="yarn dev:pdq"
 alias smdm="yarn dev:simplemdm"
 alias sd="yarn dev:smartdeploy"
 alias ui="yarn dev:ui"
-alias templates="auth0 universal-login templates update"
 
 # elixir server start
 alias ips="iex -S mix phx.server"
