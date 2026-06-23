@@ -4,6 +4,7 @@
     cob = !git checkout -b
     ammend = !git commit --amend -m
     c = !git checkout
+    unlock = !rm -f \"$(git rev-parse --git-dir)/index.lock\" && echo unlocked
     pwl = !git push --force-with-lease
     quickfix = !git add . && git commit --amend --no-edit
 		reset = !git reset --soft HEAD~1
