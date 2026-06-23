@@ -1,4 +1,3 @@
-tap "auth0/auth0-cli"
 tap "bufbuild/buf"
 tap "martensson/tpm"
 tap "oven-sh/bun"
@@ -88,8 +87,6 @@ brew "zoxide"
 brew "zsh-autosuggestions"
 # Syntax highlighting for the zsh command line
 brew "zsh-syntax-highlighting"
-# Build, manage and test your Auth0 integrations from the command line
-brew "auth0/auth0-cli/auth0"
 # Incredibly fast JavaScript runtime, bundler, transpiler and package manager - all in one.
 brew "oven-sh/bun/bun"
 cask "font-jetbrains-mono"
