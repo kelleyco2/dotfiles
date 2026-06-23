@@ -11,6 +11,7 @@
 # jumps in. Ctrl-X kills the highlighted session. Works inside or outside tmux.
 
 set -euo pipefail
+. "$HOME/.local/bin/_session-lib.sh"
 
 TAB=$'\t'
 CLAUDE_WIN="claude" # window name our smug templates use for Claude
@@ -62,7 +63,7 @@ g() { printf '\033[38;5;%sm%s\033[0m' "$1" "$2"; } # g <color> <text>
 # Build the candidate list. Recomputed on each call so fzf `reload` reflects
 # sessions killed via Ctrl-X. Order: waiting → working → idle → projects.
 build_list() {
-  local ACTIVE_SECS=5 now running panes NL sess cmd act s w c a d name JOURNAL
+  local ACTIVE_SECS=5 now running panes NL sess cmd act s w c a d name
   local waiting="" working="" idle="" projects=""
   now=$(date +%s)
   running=$(tmux list-sessions -F '#{session_name}' 2>/dev/null || true)
@@ -91,18 +92,12 @@ build_list() {
     fi
   done
 
-  local dirs=("$HOME/dotfiles")
-  JOURNAL="$HOME/Journal/$(date +%Y)"
-  [[ -d "$JOURNAL" ]] && dirs+=("$JOURNAL")
-  dirs+=("$HOME"/Code/*/)
-  for d in "${dirs[@]}"; do
-    d=${d%/}
-    [[ -d "$d" ]] || continue
+  while IFS= read -r d; do
     name=${d##*/}
     name=${name//./_}
     [[ "$NL$running$NL" == *"$NL$name$NL"* ]] && continue
     projects+="$(g 240 ○) $name${TAB}start${TAB}$d"$'\n'
-  done
+  done < <(project_dirs)
 
   printf '%s' "$waiting$working$idle$projects"
 }
@@ -140,11 +135,6 @@ case "$ACTION" in
     if inside_tmux; then tmux switch-client -t "=$ARG"; else tmux attach -t "=$ARG"; fi
     ;;
   start)
-    name=${ARG##*/}
-    name=${name//./_}
-    ATTACH=""
-    inside_tmux && ATTACH="-a"
-    # shellcheck disable=SC2086
-    smug start "$name" $ATTACH 2>/dev/null || smug start default name="$name" root="$ARG" $ATTACH
+    smug_launch "${ARG##*/}" "$ARG"
     ;;
 esac

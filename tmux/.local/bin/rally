@@ -1,21 +1,9 @@
 #!/bin/sh
 
 set -eu
+. "$HOME/.local/bin/_session-lib.sh"
 
-# Candidate project dirs — skip any that don't exist (e.g. no Journal yet this year).
-JOURNAL="$HOME/Journal/$(date +%Y)"
-set -- "$HOME/dotfiles/"
-[ -d "$JOURNAL" ] && set -- "$@" "$JOURNAL/"
-set -- "$@" "$HOME"/Code/*/
-
-TARGET=$(ls -d "$@" 2>/dev/null | fzf --header-first --header="Launch Project" --prompt="🔮 " --preview "eza --tree --icons --level 3 --git-ignore {}")
+TARGET=$(project_dirs | fzf --header-first --header="Launch Project" --prompt="🔮 " --preview "eza --tree --icons --level 3 --git-ignore {}")
 [ -n "$TARGET" ] || exit 0
 
-NAME=$(basename "$TARGET" | tr '.' '_')
-
-# `-a` force-switches the client and only works inside tmux; outside tmux, attach normally.
-ATTACH=""
-[ -n "${TMUX:-}" ] && ATTACH="-a"
-
-# shellcheck disable=SC2086
-smug start "$NAME" $ATTACH 2>/dev/null || smug start default name="$NAME" root="$TARGET" $ATTACH
+smug_launch "$(basename "$TARGET")" "$TARGET"
