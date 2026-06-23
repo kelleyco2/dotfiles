@@ -1,6 +1,3 @@
-tap "bufbuild/buf"
-tap "martensson/tpm"
-tap "oven-sh/bun"
 # Extendable version manager with support for Ruby, Node.js, Erlang & more
 brew "asdf"
 # Clone of cat(1) with syntax highlighting and Git integration
@@ -88,7 +85,7 @@ brew "zsh-autosuggestions"
 # Syntax highlighting for the zsh command line
 brew "zsh-syntax-highlighting"
 # Incredibly fast JavaScript runtime, bundler, transpiler and package manager - all in one.
-brew "oven-sh/bun/bun"
+brew "bun"
 cask "font-jetbrains-mono"
 cask "font-roboto-mono-nerd-font"
 # Java runtime for Apex Language Server
