@@ -6,6 +6,7 @@
     ],
     "defaultMode": "auto"
   },
+  "model": "claude-fable-5-1[1m]",
   "hooks": {
     "PostToolUse": [
       {
@@ -72,6 +73,10 @@
           {
             "type": "command",
             "command": "node ~/.claude/hooks/notify.mjs"
+          },
+          {
+            "type": "command",
+            "command": "brain-hook session-end"
           }
         ]
       }
@@ -146,6 +151,5 @@
       "**Org-specific CLIs**: None configured",
       "routine actions under /Users/cooperkelley/Code/homestead/ are treated as this project's normal working scope"
     ]
-  },
-  "model": "claude-fable-5-1[1m]"
+  }
 }

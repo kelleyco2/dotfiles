@@ -4,6 +4,9 @@
 #
 #   brain-hook session-start   print `brain status` (agents add hook stdout to context)
 #   brain-hook stop            if the vault has uncommitted changes, sync in the background
+#   brain-hook session-end     record the session (start, end, repo, first prompt) for the
+#                              daily journal, then re-render today's journal page.
+#                              Reads the hook JSON on stdin (cwd, transcript_path).
 set -u
 BRAIN="${BRAIN_PATH:-$HOME/brain}"
 [ -x "$BRAIN/bin/brain" ] || exit 0
@@ -16,6 +19,54 @@ case "${1:-}" in
     if [ -n "$(git -C "$BRAIN" status --porcelain 2>/dev/null)" ]; then
       nohup "$BRAIN/bin/brain" sync >>"$HOME/.brain-sync.log" 2>&1 &
     fi
+    ;;
+  session-end)
+    # Parse the payload and transcript with python3 (stock on macOS and Linux).
+    # Prints: <start HH:MM>\t<end HH:MM>\t<repo>\t<topic>
+    BRAIN_HOOK_PAYLOAD="$(cat)"; export BRAIN_HOOK_PAYLOAD
+    line="$(python3 - <<'PY' 2>/dev/null
+import sys, json, os, datetime
+try:
+    payload = json.loads(os.environ.get("BRAIN_HOOK_PAYLOAD") or "{}")
+except Exception:
+    sys.exit(0)
+cwd = payload.get("cwd") or os.getcwd()
+repo = os.path.basename(cwd.rstrip("/"))
+path = payload.get("transcript_path")
+first_ts, topic = None, ""
+def local_hhmm(iso):
+    dt = datetime.datetime.fromisoformat(iso.replace("Z", "+00:00")).astimezone()
+    return dt.strftime("%H:%M")
+if path and os.path.exists(path):
+    with open(path, errors="ignore") as f:
+        for raw in f:
+            try:
+                o = json.loads(raw)
+            except Exception:
+                continue
+            if o.get("type") != "user":
+                continue
+            c = (o.get("message") or {}).get("content")
+            if isinstance(c, list):
+                c = " ".join(x.get("text", "") for x in c if isinstance(x, dict) and x.get("type") == "text")
+            if not isinstance(c, str):
+                continue
+            t = c.strip()
+            if first_ts is None and o.get("timestamp"):
+                first_ts = o["timestamp"]
+            if t and not t.startswith("<") and not topic:
+                topic = " ".join(t.split())[:120]
+            if first_ts and topic:
+                break
+now = datetime.datetime.now().strftime("%H:%M")
+start = local_hhmm(first_ts) if first_ts else now
+print("\t".join([start, now, repo, topic]))
+PY
+)"
+    [ -n "$line" ] || exit 0
+    IFS=$'\t' read -r start end repo topic <<<"$line"
+    "$BRAIN/bin/brain" session "$start" "$end" "$repo" "$topic" >/dev/null 2>&1
+    "$BRAIN/bin/brain" journal >/dev/null 2>&1
     ;;
 esac
 exit 0
