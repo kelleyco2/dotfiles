@@ -1,0 +1,9 @@
+#!/bin/bash
+# Thin launcher for the second brain CLI, which lives inside the (private) brain repo
+# so the vault stays self-describing wherever it is cloned. See brain-bootstrap.
+BRAIN="${BRAIN_PATH:-$HOME/brain}"
+if [ ! -x "$BRAIN/bin/brain" ]; then
+  echo "brain: vault not found at $BRAIN. Run brain-bootstrap (or set BRAIN_PATH)." >&2
+  exit 1
+fi
+exec "$BRAIN/bin/brain" "$@"

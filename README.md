@@ -28,23 +28,31 @@ agent is doing, parallel git worktrees, and a Claude Code config that travels be
 ## ✨ Highlights
 
 - **🔮 Session hub** (`prefix + s`) — one fzf popup over running tmux sessions *and* launchable
-  projects. Each running session shows what Claude is doing in it; `Ctrl-X` kills one.
+  projects, sorted so whatever needs you is on top. `Ctrl-X` kills one.
 
   ```
   🔮 ▮
-  ● proof      waiting        ┌ preview: git status ─────────
-  ● dotfiles   working        │   main ↑2   7 changed
-  ○ alaska2                   │  M src/app/page.tsx
-  ○ peptide                   │  ?? BLOG_STYLE.md
-  ○ ...                       │  ── recent ──
-                              │  a1b2c3  3d  Fix nav overflow
-    ● waiting  ● working  ○ launch  ^X kill
+  ● ozone      needs you  4m  ┌ preview: git status ─────────
+  ● alchemy    done       2h  │   main ↑2   7 changed
+  ● dotfiles   working        │  M src/app/page.tsx
+  ○ alaska2                   │  ?? BLOG_STYLE.md
+  ○ peptide                   │  ── recent ──
+  ○ ...                       │  a1b2c3  3d  Fix nav overflow
+    ● needs you  ● done  ● working  ○ launch  ^X kill
   ```
 
+- **🔔 Cross-project agent alerts**: a Claude Code lifecycle hook marks each session blocked,
+  done, or working, and reports it without ever leaving tmux. A dot sits next to the window
+  name, `status-right` lists every *other* session waiting on you, and a toast flashes across
+  the status bar when one you aren't looking at needs you.
+
+  ```
+   ∞ stax    ● claude   nvim   shell          ● ozone ● alchemy   2026-08-05  1:47
+  ```
 - **🌲 Parallel worktrees** (`wt add <branch>`) — sibling git worktree with your gitignored
   `.env*` copied in, a free dev `PORT` assigned, and a Claude/nvim/shell session opened.
 - **🤖 Portable Claude Code config** — settings, stack-aware `CLAUDE.md`, skills, agents,
-  a powerline statusline, and a post-edit formatter hook, all synced via Stow.
+  a powerline statusline, a post-edit formatter hook, and the notifier, all synced via Stow.
 - **⚡ Tuned editing** — Neovim on the `vim.lsp.config` API (vtsls, elixir-ls, tailwind, biome),
   format-on-save, diffview + octo for in-terminal review; tmux vi copy-mode → system clipboard.
 
@@ -58,6 +66,7 @@ agent is doing, parallel git worktrees, and a Claude Code config that travels be
 | `kitty/` | kitty terminal — JetBrains Mono + Nerd Font |
 | `git/` | git — GPG signing, `delta` pager, lazygit, handy aliases |
 | `claude/` | Claude Code — portable config, statusline, format hook, `claude-bootstrap` |
+| `brain/` | Second brain wiring — `brain` CLI launcher, `brain-hook` lifecycle glue, `brain-bootstrap` (the vault itself is a private repo) |
 | `dots/` | One-shot installer |
 
 ## 🚀 Install
@@ -75,6 +84,7 @@ Then, once per machine:
 
 ```sh
 claude-bootstrap                # register Claude plugins/marketplaces + user-scope MCP servers
+brain-bootstrap                 # clone the private second-brain vault to ~/brain
 ~/dotfiles/git/setup-gpg.sh     # generate a signing key + wire up git signing
 # in a tmux session, press `C-a I` to install tmux plugins
 ```

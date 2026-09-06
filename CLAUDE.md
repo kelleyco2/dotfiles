@@ -10,7 +10,7 @@ Personal dotfiles managed with [GNU Stow](https://www.gnu.org/software/stow/). E
 - **Install Homebrew packages only**: `brew bundle`
 - **Stow a single package**: `stow --no-folding <package>` (e.g., `stow --no-folding nvim`)
 - **Format Lua files**: `stylua <file>`
-- **Session hub**: `prefix + s` (tmux popup running `hub`) — fzf over running tmux sessions (● switch into) and projects (○ launch a smug `claude`/`nvim`/`shell` session). Replaces the old rally/switch/Claude bindings. The `rally` script still exists for direct project launch.
+- **Session hub**: `prefix + s` (tmux popup running `hub`), an fzf picker over running tmux sessions (● switch into) and projects (○ launch a smug `claude`/`nvim`/`shell` session). Sorted needs-you → done → working → idle → launchable, using the real `@claude_state` set by `hooks/notify.mjs` (falling back to a window-activity guess for sessions started before the hook). Replaces the old rally/switch/Claude bindings. The `rally` script still exists for direct project launch.
 - **Parallel worktrees**: `wt add <branch>` (creates a sibling git worktree, copies gitignored `.env*` files into it, assigns a free `PORT` in `.env.local`, and opens a smug/Claude session); `wt rm <branch>`, `wt ls`
 - **Install tmux plugins**: In a tmux session, press `C-a I` (capital I)
 - **Set up Claude Code on a new machine**: `claude-bootstrap` (idempotent — registers plugin marketplaces, installs plugins, adds the Sanity user-scope MCP server from `$SANITY_MCP_TOKEN`)
@@ -69,8 +69,21 @@ Portable, version-controlled Claude Code config, symlinked into `~/.claude/`. **
 - `agents/nextjs-reviewer.md`, `commands/run-tests.md` — custom global subagent + slash command
 - `statusline.js` — statusline (model · dir · git branch · lines · cost), wired via `settings.json` `statusLine`
 - `hooks/format.mjs` — PostToolUse hook; after Claude edits a file it runs the project's own formatter (Biome/Prettier for web, `mix format`, `stylua`) — only when that tooling is already configured, never imposed
+- `hooks/notify.mjs`: SessionStart/UserPromptSubmit/Notification/Stop/SessionEnd hook; tells you which project's Claude is waiting on you. It reduces those events to one state (`working` → `blocked` → `done`) and reports it entirely inside tmux, in three places:
+  - `@claude_state`, a **window** option, drives the colored dot next to the window name and `hub`'s sort order.
+  - `@claude_alerts`, a **global** option, lists every session that is blocked or done, and renders in `status-right`. This is the cross-session view: the per-window dot only covers the session you're attached to.
+  - a transient `display-message` toast on every attached client, fired only on a state *change* and only when that pane isn't the one you're looking at.
+  - **Window vs global scope is deliberate**: tmux resolves `#{@user}` pane → window → session, so a session-level copy of `@claude_state` would paint the dot on every sibling window. `@claude_alerts` is global precisely because it should be visible from anywhere.
+  - macOS banners are opt-in via `CLAUDE_NOTIFY_DESKTOP=1` (they land on a different display than the coding screen). Mute the others with `CLAUDE_NOTIFY_TOAST=0` / `CLAUDE_NOTIFY_TMUX=0`. Every event logs to `~/.claude/notify.log`.
 - `.local/bin/claude-bootstrap` — re-installs plugins/marketplaces and re-adds user-scope MCP servers on a new machine (run once after stow)
 - **Caveat**: a symlinked `settings.json` can be replaced by Claude's in-app writes; treat the repo copy as source of truth and re-run `stow --no-folding claude` if the symlink is orphaned.
+
+### Brain (`brain/.local/bin/`)
+Wiring for the second brain, a private PARA + LLM-wiki markdown vault at `~/brain` (repo `kelleyco2/brain`, deliberately NOT in dotfiles: it holds journal, finances, client work). The vault is self-describing (`~/brain/AGENTS.md` is the schema, `~/brain/bin/brain` the CLI), so this package is only the glue and stays agent-agnostic:
+- `brain` — launcher that execs `~/brain/bin/brain` (`status`, `inbox`, `index`, `log`, `lint`, `handoff`, `sync`)
+- `brain-hook session-start|stop` — lifecycle glue any agent can call; Claude's `settings.json` wires `session-start` (prints open projects into context) and `stop` (background `brain sync` when the vault is dirty)
+- `brain-bootstrap` — clones the vault on a new machine (`BRAIN_REMOTE` / `BRAIN_PATH` override the defaults)
+The global `CLAUDE.md` tells Claude when to read from and write back to the vault; the full protocol lives in the vault so other agents get it via `AGENTS.md`.
 
 ## Code Style
 - **Lua**: Format with `stylua`; use `snake_case`; wrap error-prone calls in `pcall`

@@ -89,9 +89,13 @@ return {
 			lib.attach = function(bufnr)
 				local ft = vim.bo[bufnr].ft
 				local lang = vim.treesitter.language.get_lang(ft)
-				if not lang then return end
+				if not lang then
+					return
+				end
 				local ok, parser = pcall(vim.treesitter.get_parser, bufnr, lang)
-				if not ok or not parser then return end
+				if not ok or not parser then
+					return
+				end
 				return original_attach(bufnr)
 			end
 		end,
@@ -166,8 +170,8 @@ return {
 		opts = {
 			workspaces = {
 				{
-					name = "Oracle",
-					path = "~/Code/Oracle",
+					name = "brain",
+					path = "~/brain",
 				},
 			},
 			follow_url_func = function(url)

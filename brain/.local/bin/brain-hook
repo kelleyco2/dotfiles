@@ -1,0 +1,21 @@
+#!/bin/bash
+# Agent lifecycle glue for the brain. Any agent with hooks calls this; the logic is not
+# tool-specific. Always exits 0 so a missing vault can never wedge a session.
+#
+#   brain-hook session-start   print `brain status` (agents add hook stdout to context)
+#   brain-hook stop            if the vault has uncommitted changes, sync in the background
+set -u
+BRAIN="${BRAIN_PATH:-$HOME/brain}"
+[ -x "$BRAIN/bin/brain" ] || exit 0
+
+case "${1:-}" in
+  session-start)
+    "$BRAIN/bin/brain" status 2>/dev/null
+    ;;
+  stop)
+    if [ -n "$(git -C "$BRAIN" status --porcelain 2>/dev/null)" ]; then
+      nohup "$BRAIN/bin/brain" sync >>"$HOME/.brain-sync.log" 2>&1 &
+    fi
+    ;;
+esac
+exit 0

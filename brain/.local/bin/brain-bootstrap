@@ -1,0 +1,20 @@
+#!/bin/bash
+# Clone the private brain repo to ~/brain (or $BRAIN_PATH) on a new machine. Idempotent.
+# The vault is private (journal, finances, client work) and lives outside dotfiles on purpose.
+set -u
+BRAIN="${BRAIN_PATH:-$HOME/brain}"
+REMOTE="${BRAIN_REMOTE:-git@github.com:kelleyco2/brain.git}"
+
+if [ -d "$BRAIN/.git" ]; then
+  echo "==> $BRAIN already cloned, syncing"
+  "$BRAIN/bin/brain" sync
+elif [ -e "$BRAIN" ]; then
+  echo "!! $BRAIN exists but is not a git checkout; move it aside and re-run" >&2
+  exit 1
+else
+  echo "==> Cloning $REMOTE to $BRAIN"
+  git clone "$REMOTE" "$BRAIN" || exit 1
+fi
+
+echo
+"$BRAIN/bin/brain" status
