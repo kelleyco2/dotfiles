@@ -10,6 +10,7 @@
 set -u
 BRAIN="${BRAIN_PATH:-$HOME/brain}"
 [ -x "$BRAIN/bin/brain" ] || exit 0
+[ "${BRAIN_HOOK_SKIP:-0}" = "1" ] && exit 0   # set by brain nightly/weekly/standup
 
 case "${1:-}" in
   session-start)
