@@ -4,6 +4,7 @@
 # Emit candidate project directories, one absolute path per line.
 project_dirs() {
   printf '%s\n' "$HOME/dotfiles"
+  [ -d "$HOME/brain" ] && printf '%s\n' "$HOME/brain"
   for d in "$HOME"/Code/*/; do
     [ -d "$d" ] && printf '%s\n' "${d%/}"
   done
