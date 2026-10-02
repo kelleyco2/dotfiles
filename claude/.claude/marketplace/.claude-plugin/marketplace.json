@@ -1,0 +1,16 @@
+{
+  "name": "cooper-mods",
+  "owner": { "name": "Cooper Kelley" },
+  "plugins": [
+    {
+      "name": "brain-commands",
+      "source": "./brain-commands",
+      "description": "/next and /handoff update the second brain instantly, without a Claude turn"
+    },
+    {
+      "name": "matrix-rain",
+      "source": "./matrix-rain",
+      "description": "Matrix rain above the prompt while Claude works; /rain on|off|<rows>"
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "name": "matrix-rain",
+  "version": "0.1.2",
+  "description": "Matrix rain above the prompt while Claude works: speed follows output rate, glyphs carry the files and commands in play, amber when blocked on you",
+  "types": "./types/index.d.ts"
+}

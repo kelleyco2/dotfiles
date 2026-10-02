@@ -99,7 +99,9 @@
     "linear@claude-plugins-official": true,
     "elixir-phoenix@oliver-kriska": true,
     "vercel@claude-plugins-official": true,
-    "slack@claude-plugins-official": true
+    "slack@claude-plugins-official": true,
+    "brain-commands@cooper-mods": true,
+    "matrix-rain@cooper-mods": true
   },
   "extraKnownMarketplaces": {
     "claude-plugins-official": {
@@ -112,6 +114,12 @@
       "source": {
         "source": "github",
         "repo": "oliver-kriska/claude-elixir-phoenix"
+      }
+    },
+    "cooper-mods": {
+      "source": {
+        "source": "directory",
+        "path": "/Users/cooperkelley/dotfiles/claude/.claude/marketplace"
       }
     }
   },

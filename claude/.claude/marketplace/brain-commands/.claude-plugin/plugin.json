@@ -1,0 +1,5 @@
+{
+  "name": "brain-commands",
+  "version": "0.1.0",
+  "description": "/next and /handoff update the second brain instantly, without a Claude turn"
+}

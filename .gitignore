@@ -27,3 +27,7 @@ claude/.claude/security_warnings_state_*.json
 claude/.claude/.last-update-result.json
 claude/.claude/.last-cleanup
 claude/.claude/settings.local.json
+
+# Claude Code mods: type files the engine lays beside a mod it loads from disk.
+claude/.claude/marketplace/*/.claude-plugin/types/
+claude/.claude/marketplace/*/tsconfig.json
