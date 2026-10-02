@@ -1,14 +1,14 @@
 # Global instructions
 
 ## Working style
+- **Be extremely concise. Sacrifice grammar for the sake of concision.**
 - **Never use em dashes (—) in anything you write for me:** chat replies, prose, code
   comments, commit messages, docs, PR descriptions. Use a colon, a comma, parentheses, or
   two sentences instead. This is a hard rule.
 - Don't commit or push without me saying so.
 - For anything web-facing, verify in a real browser: go back and forth between browser and
-  code to refine until it's right. Use the **Playwright** plugin when you need the DOM,
-  console, or network, and open a **terminal-browser** split pane so I can watch the page
-  while you work instead of reading your description of it.
+  code to refine until it's right. Use the **Playwright** plugin for all of it (navigation,
+  screenshots, DOM, console, network). Don't use terminal-browser.
 - Chromium is not iOS Safari. When something is mobile-facing, ask me to check it on my
   phone before you call it done.
 - Match the existing style of whatever file you're in. Run the project's formatter and test
