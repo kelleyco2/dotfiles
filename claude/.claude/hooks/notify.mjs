@@ -85,29 +85,6 @@ const log = (line) => {
   } catch {}
 };
 
-// Roll every session's state into one status-bar string. The per-window dot only
-// covers the session you're attached to, so this is what tells you a *different*
-// project needs you. Blocked outranks done; a session drops off the list as soon
-// as it goes back to working.
-const publishAlerts = () => {
-  const out = tmux(
-    ["list-panes", "-a", "-F", "#{session_name}\t#{@claude_state}"],
-    true,
-  );
-  const flagged = new Map();
-  for (const line of (out || "").split("\n")) {
-    const [sess, state] = line.split("\t");
-    if (!sess || (state !== "blocked" && state !== "done")) continue;
-    if (flagged.get(sess) !== "blocked") flagged.set(sess, state);
-  }
-  const rank = (s) => (s === "blocked" ? 0 : 1);
-  const text = [...flagged.entries()]
-    .sort((a, b) => rank(a[1]) - rank(b[1]) || a[0].localeCompare(b[0]))
-    .map(([sess, state]) => `#[fg=${state === "blocked" ? "green" : "cyan"}]● ${sess}`)
-    .join(" ");
-  tmux(["set-option", "-g", "@claude_alerts", text ? `${text} ` : ""]);
-};
-
 // Transient line across the status bar of every attached client, so the alert
 // lands on the screen being coded on rather than wherever macOS banners go.
 const toast = (text) => {
@@ -215,7 +192,6 @@ process.stdin.on("end", () => {
       tmux(["set-option", "-w", "-t", window, "@claude_state", next]);
       tmux(["set-option", "-w", "-t", window, "@claude_at", String(now)]);
     }
-    publishAlerts();
     tmux(["refresh-client", "-S"]); // repaint the status bar immediately
   }
 
