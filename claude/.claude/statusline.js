@@ -22,6 +22,7 @@ const PURPLE = [190, 149, 255]; // #be95ff branch
 const AMBER = [241, 194, 27]; //  #f1c21b dirty
 const GREEN = [66, 190, 101]; //  #42be65
 const RED = [250, 77, 86]; //     #fa4d56
+const EMPTY = [111, 111, 111]; // #6f6f6f unfilled gauge cells
 
 const fg = (c) => `\x1b[38;2;${c[0]};${c[1]};${c[2]}m`;
 const bg = (c) => `\x1b[48;2;${c[0]};${c[1]};${c[2]}m`;
@@ -69,6 +70,22 @@ process.stdin.on("end", () => {
         });
       }
     } catch {}
+  }
+
+  // Context gauge: how full the window is, green, then amber, then red as /clear gets due.
+  const pct = d.context_window?.used_percentage;
+  if (typeof pct === "number") {
+    const used = Math.max(0, Math.min(100, pct));
+    const cells = 8;
+    const filled = Math.round((used / 100) * cells);
+    const color = used >= 80 ? RED : used >= 50 ? AMBER : GREEN;
+    const size = d.context_window?.context_window_size;
+    const tokens = typeof size === "number" ? ` ${Math.round(((used / 100) * size) / 1000)}k` : "";
+    segs.push({
+      text: `${"▰".repeat(filled)}${fg(EMPTY)}${"▱".repeat(cells - filled)}${fg(color)} ${Math.round(used)}%${tokens}`,
+      bgc: MID,
+      fgc: color,
+    });
   }
 
   // Render powerline: each segment flows into the next via a colored arrow.
