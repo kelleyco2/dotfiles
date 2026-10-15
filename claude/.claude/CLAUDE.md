@@ -11,6 +11,11 @@
   screenshots, DOM, console, network). Don't use terminal-browser.
 - Chromium is not iOS Safari. When something is mobile-facing, ask me to check it on my
   phone before you call it done.
+- **Code comments are long-lived; write only the necessary ones.** A comment says *why*
+  something non-obvious is the way it is, in terms that stay true as long as the code does.
+  No ticket/PR references (`PORT-123`, `#456`), no history ("previously", "now", "after the
+  fix"), and nothing the code or the test/describe name already says. Ticket context
+  belongs in the commit message and PR description.
 - Match the existing style of whatever file you're in. Run the project's formatter and test
   command before calling something done.
 - Per-project `CLAUDE.md` files (most of my repos have one) own the specifics, so defer to them.
