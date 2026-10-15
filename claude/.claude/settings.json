@@ -122,6 +122,7 @@
       }
     }
   },
+  "feedbackDrafts": "off",
   "alwaysThinkingEnabled": true,
   "effortLevel": "high",
   "autoCompactWindow": 1000000,
