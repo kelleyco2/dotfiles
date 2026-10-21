@@ -105,5 +105,21 @@ process.stdin.on("end", () => {
     out += ` ${fg(GREEN)}+${added}${R} ${fg(RED)}-${removed}${R}`;
   }
 
+  // Vercel deploy glyph, written per session by the vercel-deploys mod. Stale files are
+  // ignored so a mod that stopped polling never shows an old state as current.
+  try {
+    const fs = require("node:fs");
+    const file = `${process.env.HOME}/.claude/state/vercel-deploys/${d.session_id}.json`;
+    if (d.session_id && Date.now() - fs.statSync(file).mtimeMs < 15 * 60_000) {
+      const v = JSON.parse(fs.readFileSync(file, "utf8"));
+      const mark =
+        v.status !== "ok" ? `${fg(EMPTY)}?` :
+        v.isBuilding ? `${fg(AMBER)}◐` :
+        v.prod === "ERROR" ? `${fg(RED)}✕` :
+        v.prod === "READY" ? `${fg(GREEN)}●` : "";
+      if (mark) out += `  ${fg(EMPTY)}▲${mark}${R}`;
+    }
+  } catch {}
+
   process.stdout.write(out);
 });

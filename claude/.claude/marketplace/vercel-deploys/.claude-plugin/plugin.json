@@ -1,0 +1,6 @@
+{
+  "name": "vercel-deploys",
+  "version": "0.3.0",
+  "description": "Vercel deploy status in the status line; /deploys toggles a navigable sidebar",
+  "types": "./types/index.d.ts"
+}

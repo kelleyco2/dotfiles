@@ -37,7 +37,7 @@ claude plugin install "elixir-phoenix@oliver-kriska" 2>/dev/null || true
 
 # Personal mods (in-process plugins), a local marketplace in this repo (marketplace name: cooper-mods)
 claude plugin marketplace add "${DOTFILES:-$HOME/dotfiles}/claude/.claude/marketplace" 2>/dev/null || true
-for p in brain-commands matrix-rain; do
+for p in brain-commands matrix-rain vercel-deploys; do
   echo "    - ${p}@cooper-mods"
   claude plugin install "${p}@cooper-mods" 2>/dev/null || true
 done

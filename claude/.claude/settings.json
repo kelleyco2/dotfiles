@@ -100,7 +100,8 @@
     "vercel@claude-plugins-official": true,
     "slack@claude-plugins-official": true,
     "brain-commands@cooper-mods": true,
-    "matrix-rain@cooper-mods": true
+    "matrix-rain@cooper-mods": true,
+    "vercel-deploys@cooper-mods": true
   },
   "extraKnownMarketplaces": {
     "claude-plugins-official": {

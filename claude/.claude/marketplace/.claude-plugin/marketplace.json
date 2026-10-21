@@ -1,6 +1,8 @@
 {
   "name": "cooper-mods",
-  "owner": { "name": "Cooper Kelley" },
+  "owner": {
+    "name": "Cooper Kelley"
+  },
   "plugins": [
     {
       "name": "brain-commands",
@@ -11,6 +13,11 @@
       "name": "matrix-rain",
       "source": "./matrix-rain",
       "description": "Matrix rain above the prompt while Claude works; /rain on|off|<rows>"
+    },
+    {
+      "name": "vercel-deploys",
+      "source": "./vercel-deploys",
+      "description": "Vercel deploy status in the status line; /deploys toggles a navigable sidebar"
     }
   ]
 }
