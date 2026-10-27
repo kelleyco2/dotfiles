@@ -6,6 +6,11 @@
   comments, commit messages, docs, PR descriptions. Use a colon, a comma, parentheses, or
   two sentences instead. This is a hard rule.
 - Don't commit or push without me saying so.
+- **Never post comments, replies, or reviews on GitHub** (PRs, issues, review threads), not
+  even bot triggers like `@coderabbitai review`, and don't resolve threads, unless I approve
+  that specific post. Draft the text in chat first.
+- PR descriptions get no Claude Code footer (no "Generated with Claude Code" line, no session
+  link). Commit trailers are fine.
 - For anything web-facing, verify in a real browser: go back and forth between browser and
   code to refine until it's right. Use the **Playwright** plugin for all of it (navigation,
   screenshots, DOM, console, network). Don't use terminal-browser.
@@ -32,6 +37,9 @@
   If no project exists for the work, create one from the template in `AGENTS.md`.
 - Per-repo auto-memory is still fine for repo-local gotchas; anything another repo or agent
   would want goes in `~/brain` instead.
+- **Before drafting anything sent under my name** (email, Slack, PR comment, client copy), read
+  `~/brain/areas/dev/voice.md` and follow it. When I edit a draft before sending, add what
+  changed to that file.
 
 ## Primary stack: Next.js
 Most of my work is Next.js apps. Defaults unless a repo says otherwise:
