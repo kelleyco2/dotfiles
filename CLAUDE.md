@@ -42,7 +42,7 @@ The `--no-folding` flag ensures stow creates individual symlinks rather than sym
 - Plugin manager: **tpm** (installed via Homebrew, run line at bottom of `tmux.conf`)
 - Project launchers (`tmux/.local/bin/`): `hub` (the session hub) and `rally` pick a project from `~/dotfiles/` and `~/Code/*` and open a smug session; `wt` does the same for a worktree. Shared list/launch logic lives in `_session-lib.sh` (sourced by all three).
 - Smug templates in `tmux/.config/smug/` define session layouts (default opens claude / nvim / shell)
-- Key bindings: `prefix + s` opens the session hub (popup), `prefix + !` kills session, `|`/`-` for splits, `prefix + r` reloads the config
+- Key bindings: `prefix + s` opens the session hub (popup), `prefix + BSpace` (or built-in `L`) toggles to the last session, `prefix + !` kills session, `|`/`-` for splits, `prefix + r` reloads the config
 - Pane/window indexes start at 1, mouse enabled, vim-tmux-navigator for seamless pane movement
 
 ### Zsh (`zsh/`)
